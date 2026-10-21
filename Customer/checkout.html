@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Paradyze</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 7.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #183F35;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .header-icons .icon {
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .icon {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Security Badge */
+        .security-badge {
+            background: #e8f5e8;
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .security-badge i {
+            color: #4CAF50;
+            font-size: 1.5rem;
+        }
+
+        .security-badge p {
+            margin: 0;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        /* Checkout Container */
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .checkout-title {
+            font-size: 32px;
+            color: #000000;
+            margin-bottom: 0px;
+        }
+
+        .checkout-subtitle {
+            color: #183F35;
+            font-size: 16px;
+        }
+
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Checkout Sections */
+        .checkout-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #183F35;
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Error and Success States */
+        .error {
+            border-color: #e74c3c !important;
+            background-color: #fdf2f2;
+        }
+
+        .success {
+            border-color: #27ae60 !important;
+            background-color: #f2fdf2;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .cart-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-right: 15px; 
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e0e0e0;
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .cart-item-details {
+            flex: 1;
+            text-align: right;
+        }
+
+        .cart-item-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #F44336;
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .quantity-btn {
+            width: 25px;
+            height: 25px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            margin: 0 5px;
+            padding: 3px;
+        }
+
+        /* Payment Options */
+        .payment-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #183F35;
+        }
+
+        .payment-option.selected {
+            border-color: #183F35;
+            background-color: rgba(24, 63, 53, 0.05);
+        }
+
+        .payment-option input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .payment-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: #183F35;
+        }
+
+        /* Payment Method Details */
+        .payment-details {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #183F35;
+            display: none;
+        }
+
+        .payment-details.active {
+            display: block;
+        }
+
+        .bank-details {
+            font-size: 0.9rem;
+        }
+
+        .bank-details p {
+            margin-bottom: 8px;
+        }
+
+        .bank-details strong {
+            color: #183F35;
+        }
+
+        /* Credit Card Form */
+        .card-form {
+            margin-top: 15px;
+        }
+
+        .card-security {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #e8f5e8;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .card-security i {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px 0;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: #0f2c24;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #183F35;
+            color: #183F35;
+        }
+
+        .btn-outline:hover {
+            background: #183F35;
+            color: white;
+        }
+
+        .btn-small {
+            width: auto;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Security Features */
+        .security-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .security-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .security-feature i {
+            color: #4CAF50;
+        }
+
+        /* Attractive Notifications */
+        .paradyze-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(24, 63, 53, 0.3);
+            z-index: 10000;
+            font-weight: 500;
+            animation: slideInRight 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 6px solid #183F35;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 350px;
+            max-width: 450px;
+            transform: translateX(400px);
+            opacity: 0;
+        }
+
+        .paradyze-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .paradyze-notification.success {
+            border-left-color: #27ae60;
+            background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+        }
+
+        .paradyze-notification.error {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fff8f8 0%, #fdf2f2 100%);
+        }
+
+        .paradyze-notification.warning {
+            border-left-color: #f39c12;
+            background: linear-gradient(135deg, #fffbf0 0%, #fef9e7 100%);
+        }
+
+        .paradyze-notification.info {
+            border-left-color: #3498db;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%);
+        }
+
+        .notification-icon {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .success .notification-icon {
+            background: #27ae60;
+            color: white;
+        }
+
+        .error .notification-icon {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .warning .notification-icon {
+            background: #f39c12;
+            color: white;
+        }
+
+        .info .notification-icon {
+            background: #3498db;
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .notification-message {
+            color: #5d6d7e;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #183F35;
+            border-radius: 0 0 0 8px;
+            width: 100%;
+            transform-origin: left;
+            animation: progressBar 5s linear forwards;
+        }
+
+        .success .notification-progress {
+            background: #27ae60;
+        }
+
+        .error .notification-progress {
+            background: #e74c3c;
+        }
+
+        .warning .notification-progress {
+            background: #f39c12;
+        }
+
+        .info .notification-progress {
+            background: #3498db;
+        }
+
+        /* Animation keyframes */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes progressBar {
+            from {
+                transform: scaleX(1);
+            }
+            to {
+                transform: scaleX(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkout-title {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .security-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .paradyze-notification {
+                min-width: 300px;
+                right: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 1rem; color: inherit;">
+                    <img src="../Assets/Logo.jpg" alt="Paradyze Logo" class="logo-image">
+                    <div class="logo-text">
+                        <h1>PARADYZE</h1>
+                        <p>Your Style, Our Passion</p>
+                    </div>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="search.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <a href="login.html" class="icon" id="user-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Checkout Content -->
+    <div class="checkout-container">
+        <h1 class="checkout-title">Checkout</h1>
+        <p class="checkout-subtitle">Complete your details to place your order</p>
+        
+        <!-- Security Badge -->
+        <div class="security-badge">
+            <i class="fas fa-shield-alt"></i>
+            <p>🔒 Secure Checkout - Your payment information is protected with SSL encryption</p>
+        </div>
+
+        <!-- Security Features -->
+        <div class="security-features">
+            <div class="security-feature">
+                <i class="fas fa-lock"></i>
+                <span>256-bit SSL Encryption</span>
+            </div>
+            <div class="security-feature">
+                <i class="fas fa-shield-alt"></i>
+                <span>PCI DSS Compliant</span>
+            </div>
+            <div class="security-feature">
+                <i class="fas fa-user-shield"></i>
+                <span>Data Protection</span>
+            </div>
+            <div class="security-feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Verified Secure</span>
+            </div>
+        </div>
+        
+        <div class="checkout-content">
+            <!-- Left Column -->
+            <div>
+                <!-- Shipping Information -->
+                <div class="checkout-section">
+                    <h2 class="section-title">Shipping Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="full-name">Full Name *</label>
+                        <input type="text" id="full-name" placeholder="Enter your full name" required>
+                        <div class="error-message" id="name-error">Please enter a valid name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" placeholder="example@gmail.com" required>
+                        <div class="error-message" id="email-error">Please enter a valid email address</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" placeholder="+94 7XX XXX XXX" required>
+                        <div class="error-message" id="phone-error">Please enter a valid phone number</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <input type="text" id="address" placeholder="No. 10, Main Street" required>
+                        <div class="error-message" id="address-error">Please enter your address</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" placeholder="Colombo" required>
+                            <div class="error-message" id="city-error">Please enter your city</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="postal-code">Postal Code *</label>
+                            <input type="text" id="postal-code" placeholder="10000" required>
+                            <div class="error-message" id="postal-error">Please enter a valid postal code</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Section -->
+                <div class="checkout-section">
+                    <h2 class="section-title">Payment Method</h2>
+                    
+                    <!-- Cash on Delivery -->
+                    <div class="payment-option selected" data-method="cod">
+                        <input type="radio" id="cash-on-delivery" name="payment" checked>
+                        <i class="payment-icon fas fa-money-bill-wave"></i>
+                        <label for="cash-on-delivery">Cash on Delivery</label>
+                    </div>
+                    
+                    <!-- Bank Transfer -->
+                    <div class="payment-option" data-method="bank">
+                        <input type="radio" id="bank-transfer" name="payment">
+                        <i class="payment-icon fas fa-university"></i>
+                        <label for="bank-transfer">Bank Transfer</label>
+                    </div>
+                    
+                    <!-- Credit/Debit Card -->
+                    <div class="payment-option" data-method="card">
+                        <input type="radio" id="credit-card" name="payment">
+                        <i class="payment-icon fas fa-credit-card"></i>
+                        <label for="credit-card">Credit/Debit Card</label>
+                    </div>
+                    
+                    <!-- Payment Method Details -->
+                    <div class="payment-details" id="cod-details">
+                        <p><strong>Pay when you receive your order</strong></p>
+                        <p>Our delivery executive will collect the payment when your order is delivered.</p>
+                    </div>
+                    
+                    <div class="payment-details" id="bank-details">
+                        <div class="bank-details">
+                            <p><strong>Bank Transfer Instructions:</strong></p>
+                            <p><strong>Bank:</strong> Commercial Bank of Ceylon</p>
+                            <p><strong>Account Name:</strong> Paradyze (Pvt) Ltd</p>
+                            <p><strong>Account Number:</strong> 123456789012</p>
+                            <p><strong>Branch:</strong> Mount Lavinia</p>
+                            <p><strong>Reference:</strong> Your Order ID</p>
+                            
+                            <p style="margin-top: 15px; padding: 10px; background: #e8f5e8; border-radius: 4px;">
+                                <strong>Important:</strong> Please send the payment receipt to <strong>payments@paradyze.com</strong> to confirm your payment.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-details" id="card-details">
+                        <div class="card-form">
+                            <div class="card-security">
+                                <i class="fas fa-lock"></i>
+                                <span>Your card details are secure and encrypted</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-number">Card Number *</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                                <div class="error-message" id="card-number-error">Please enter a valid card number</div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry">Expiry Date *</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                                    <div class="error-message" id="card-expiry-error">Please enter a valid expiry date</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="card-cvv">CVV *</label>
+                                    <input type="text" id="card-cvv" placeholder="123" maxlength="4">
+                                    <div class="error-message" id="card-cvv-error">Please enter a valid CVV</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-name">Cardholder Name *</label>
+                                <input type="text" id="card-name" placeholder="As shown on your card">
+                                <div class="error-message" id="card-name-error">Please enter the name on your card</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div>
+                <!-- Order Summary -->
+                <div class="checkout-section">
+                    <h2 class="section-title">Order Summary</h2>
+                    
+                    <div class="order-summary" id="order-summary">
+                        <!-- Cart items will be dynamically populated here -->
+                        <div class="empty-cart-message" id="empty-cart-message">
+                            Your cart is empty. <a href="shop.html">Continue shopping</a>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the Terms and Conditions and Privacy Policy. *</label>
+                    </div>
+                    
+                    <button class="btn" id="place-order-btn">
+                        <span id="btn-text">Place Order</span>
+                        <span id="btn-loading" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i> Processing...
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="../Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="../Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="../Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templers Road, Mount Lavinia, Sri Lanka
+                </div><hr>
+                <div class="contact-item">
+                    📞 011 288 6837
+                </div><hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Paradyze. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Security Configuration
+        const SECURITY_CONFIG = {
+            maxAttempts: 3,
+            lockoutTime: 300000, // 5 minutes
+            sessionTimeout: 1800000, // 30 minutes
+            csrfToken: generateCSRFToken()
+        };
+
+        // Security state
+        let securityState = {
+            attempts: 0,
+            lastAttempt: 0,
+            sessionStart: Date.now()
+        };
+
+        // Cart data
+        let cartItems = [];
+        let selectedPaymentMethod = 'cod';
+
+        // Generate CSRF Token
+        function generateCSRFToken() {
+            return 'csrf_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        }
+
+        // Input sanitization
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return input;
+            
+            return input
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;')
+                .replace(/\//g, '&#x2F;')
+                .trim();
+        }
+
+        // Validation functions
+        const validators = {
+            name: (value) => {
+                const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+                return nameRegex.test(value.trim());
+            },
+            email: (value) => {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(value.trim());
+            },
+            phone: (value) => {
+                const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+                return phoneRegex.test(value.replace(/\s/g, ''));
+            },
+            address: (value) => {
+                return value.trim().length >= 5 && value.trim().length <= 200;
+            },
+            city: (value) => {
+                return value.trim().length >= 2 && value.trim().length <= 50;
+            },
+            postalCode: (value) => {
+                const postalRegex = /^[0-9]{4,10}$/;
+                return postalRegex.test(value.trim());
+            },
+            cardNumber: (value) => {
+                const cardRegex = /^[0-9]{13,19}$/;
+                return cardRegex.test(value.replace(/\s/g, ''));
+            },
+            cardExpiry: (value) => {
+                const expiryRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+                if (!expiryRegex.test(value)) return false;
+                
+                const [month, year] = value.split('/');
+                const now = new Date();
+                const currentYear = now.getFullYear() % 100;
+                const currentMonth = now.getMonth() + 1;
+                
+                return parseInt(year) > currentYear || 
+                       (parseInt(year) === currentYear && parseInt(month) >= currentMonth);
+            },
+            cardCVV: (value) => {
+                const cvvRegex = /^[0-9]{3,4}$/;
+                return cvvRegex.test(value);
+            },
+            cardName: (value) => {
+                return value.trim().length >= 2 && value.trim().length <= 50;
+            }
+        };
+
+        // Show attractive notification
+        function showNotification(title, message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `paradyze-notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    ${type === 'success' ? '✓' : 
+                      type === 'error' ? '⚠' : 
+                      type === 'warning' ? '!' : 'ℹ'}
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <div class="notification-progress"></div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 5000);
+        }
+
+        // Show error message
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(fieldId + '-error');
+            
+            if (field && errorElement) {
+                field.classList.add('error');
+                field.classList.remove('success');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // Show success state
+        function showSuccess(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(fieldId + '-error');
+            
+            if (field && errorElement) {
+                field.classList.remove('error');
+                field.classList.add('success');
+                errorElement.style.display = 'none';
+            }
+        }
+
+        // Validate field
+        function validateField(fieldId, validator) {
+            const field = document.getElementById(fieldId);
+            if (!field) return false;
+            
+            const value = field.value.trim();
+            
+            if (!value) {
+                showError(fieldId, 'This field is required');
+                return false;
+            }
+            
+            if (!validator(value)) {
+                showError(fieldId, 'Please enter a valid value');
+                return false;
+            }
+            
+            showSuccess(fieldId);
+            return true;
+        }
+
+        // Format card number with spaces
+        function formatCardNumber(value) {
+            return value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
+        }
+
+        // Format expiry date
+        function formatExpiryDate(value) {
+            return value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2');
+        }
+
+        // Check security lockout
+        function checkSecurityLockout() {
+            const now = Date.now();
+            if (securityState.attempts >= SECURITY_CONFIG.maxAttempts) {
+                if (now - securityState.lastAttempt < SECURITY_CONFIG.lockoutTime) {
+                    return true;
+                } else {
+                    // Reset attempts after lockout period
+                    securityState.attempts = 0;
+                }
+            }
+            return false;
+        }
+
+        // Check session timeout
+        function checkSessionTimeout() {
+            const now = Date.now();
+            if (now - securityState.sessionStart > SECURITY_CONFIG.sessionTimeout) {
+                showNotification('Session Expired', 'Your session has expired. Please refresh the page.', 'warning');
+                setTimeout(() => window.location.reload(), 2000);
+                return true;
+            }
+            return false;
+        }
+
+        // Encrypt sensitive data (basic implementation)
+        function encryptData(data) {
+            // In a real application, use proper encryption
+            // This is a basic obfuscation for demonstration
+            return btoa(JSON.stringify({
+                data: data,
+                timestamp: Date.now(),
+                csrf: SECURITY_CONFIG.csrfToken
+            }));
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+        
+        // Check login status
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const userIcon = document.getElementById('user-icon');
+            
+            if (token) {
+                const user = JSON.parse(localStorage.getItem('user'));
+                userIcon.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 0.7rem; position: absolute; bottom: -8px; right: -5px;">👤</span>
+                `;
+                userIcon.href = 'profile.html';
+            }
+        }
+
+        // Load cart from storage with security checks
+        function loadCartFromStorage() {
+            try {
+                if (checkSessionTimeout()) return;
+
+                const cartData = localStorage.getItem('paradyzeCart');
+                
+                if (cartData && cartData !== 'null' && cartData !== 'undefined') {
+                    cartItems = JSON.parse(cartData);
+                    
+                    // Validate cart items structure
+                    cartItems = cartItems.filter(item => 
+                        item && 
+                        (item.name || item.id) && 
+                        item.price && 
+                        item.quantity
+                    );
+                    
+                } else {
+                    cartItems = [];
+                }
+            } catch (error) {
+                console.error('Security: Error loading cart data', error);
+                cartItems = [];
+            }
+        }
+
+        // Payment option selection
+        function handlePaymentSelection(method) {
+            selectedPaymentMethod = method;
+            
+            // Hide all payment details
+            document.querySelectorAll('.payment-details').forEach(detail => {
+                detail.classList.remove('active');
+            });
+            
+            // Show selected payment details
+            const detailsElement = document.getElementById(method + '-details');
+            if (detailsElement) {
+                detailsElement.classList.add('active');
+            }
+        }
+
+        // Real-time validation
+        document.getElementById('full-name').addEventListener('blur', () => validateField('full-name', validators.name));
+        document.getElementById('email').addEventListener('blur', () => validateField('email', validators.email));
+        document.getElementById('phone').addEventListener('blur', () => validateField('phone', validators.phone));
+        document.getElementById('address').addEventListener('blur', () => validateField('address', validators.address));
+        document.getElementById('city').addEventListener('blur', () => validateField('city', validators.city));
+        document.getElementById('postal-code').addEventListener('blur', () => validateField('postal-code', validators.postalCode));
+
+        // Card input formatting
+        document.getElementById('card-number').addEventListener('input', function(e) {
+            this.value = formatCardNumber(e.target.value);
+        });
+
+        document.getElementById('card-expiry').addEventListener('input', function(e) {
+            this.value = formatExpiryDate(e.target.value);
+        });
+
+        document.getElementById('card-cvv').addEventListener('input', function(e) {
+            this.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // Card validation
+        document.getElementById('card-number').addEventListener('blur', () => validateField('card-number', validators.cardNumber));
+        document.getElementById('card-expiry').addEventListener('blur', () => validateField('card-expiry', validators.cardExpiry));
+        document.getElementById('card-cvv').addEventListener('blur', () => validateField('card-cvv', validators.cardCVV));
+        document.getElementById('card-name').addEventListener('blur', () => validateField('card-name', validators.cardName));
+
+        // Initialize the checkout page
+        function initializeCheckout() {
+            updateCartCount();
+            checkLoginStatus();
+            loadCartFromStorage();
+            updateOrderSummary();
+            
+            if (cartItems.length === 0) {
+                document.getElementById('place-order-btn').disabled = true;
+                document.getElementById('empty-cart-message').style.display = 'block';
+            } else {
+                document.getElementById('place-order-btn').disabled = false;
+                document.getElementById('empty-cart-message').style.display = 'none';
+            }
+            
+            // Initialize payment method
+            handlePaymentSelection('cod');
+        }
+
+        // Get product image
+        function getProductImage(item) {
+            if (item.image && typeof item.image === 'string' && item.image.trim() !== '') {
+                return item.image;
+            }
+            return null;
+        }
+
+        // Update order summary
+        function updateOrderSummary() {
+            const orderSummary = document.getElementById('order-summary');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            
+            // Clear existing items but keep the empty message
+            const existingItems = orderSummary.querySelectorAll('.cart-item, .summary-totals');
+            existingItems.forEach(item => {
+                if (item.id !== 'empty-cart-message') {
+                    item.remove();
+                }
+            });
+            
+            if (!cartItems || cartItems.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            let subtotal = 0;
+            
+            // Add each cart item to the summary
+            cartItems.forEach((item, index) => {
+                let price = 0;
+                if (typeof item.price === 'string') {
+                    const priceMatch = item.price.match(/(\d+[.,]?\d*)/);
+                    if (priceMatch) {
+                        price = parseFloat(priceMatch[0].replace(',', ''));
+                    }
+                } else if (typeof item.price === 'number') {
+                    price = item.price;
+                }
+                
+                const quantity = item.quantity || 1;
+                const itemTotal = price * quantity;
+                subtotal += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                
+                let productName = sanitizeInput(item.name || 'Product');
+                const productImage = getProductImage(item);
+                
+                let imageHtml = '';
+                if (productImage) {
+                    imageHtml = `<img src="${productImage}" alt="${productName}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'product-placeholder\\'>IMG</div>'">`;
+                } else {
+                    imageHtml = '<div class="product-placeholder">IMG</div>';
+                }
+                
+                cartItem.innerHTML = `
+                    <div class="cart-item-image">
+                        ${imageHtml}
+                    </div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${productName}</div>
+                        <div class="cart-item-price">Rs. ${itemTotal.toFixed(2)}</div>
+                        <div class="cart-item-quantity">
+                            <span>Quantity: ${quantity}</span>
+                        </div>
+                    </div>
+                `;
+                
+                orderSummary.appendChild(cartItem);
+            });
+            
+            // Calculate shipping and total
+            const shipping = subtotal > 0 ? 500.00 : 0;
+            const total = subtotal + shipping;
+            
+            // Add summary totals
+            const summaryTotals = document.createElement('div');
+            summaryTotals.className = 'summary-totals';
+            summaryTotals.innerHTML = `
+                <div class="summary-item">
+                    <span>Sub Total</span>
+                    <span>Rs. ${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Shipping</span>
+                    <span>Rs. ${shipping.toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Discount</span>
+                    <span>Rs. 0.00</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>Rs. ${total.toFixed(2)}</span>
+                </div>
+            `;
+            
+            orderSummary.appendChild(summaryTotals);
+        }
+
+        // Enhanced secure order placement
+        document.getElementById('place-order-btn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            // Security checks
+            if (checkSecurityLockout()) {
+                showNotification('Security Alert', 'Too many failed attempts. Please try again in 5 minutes.', 'error');
+                return;
+            }
+            
+            if (checkSessionTimeout()) {
+                return;
+            }
+            
+            if (cartItems.length === 0) {
+                showNotification('Empty Cart', 'Your cart is empty. Please add items to your cart before placing an order.', 'warning');
+                return;
+            }
+            
+            // Validate all fields based on payment method
+            let validations = [
+                validateField('full-name', validators.name),
+                validateField('email', validators.email),
+                validateField('phone', validators.phone),
+                validateField('address', validators.address),
+                validateField('city', validators.city),
+                validateField('postal-code', validators.postalCode)
+            ];
+            
+            // Add card validation if card payment selected
+            if (selectedPaymentMethod === 'card') {
+                validations = validations.concat([
+                    validateField('card-number', validators.cardNumber),
+                    validateField('card-expiry', validators.cardExpiry),
+                    validateField('card-cvv', validators.cardCVV),
+                    validateField('card-name', validators.cardName)
+                ]);
+            }
+            
+            if (validations.includes(false)) {
+                showNotification('Form Error', 'Please fix the errors in the form before submitting.', 'error');
+                securityState.attempts++;
+                securityState.lastAttempt = Date.now();
+                return;
+            }
+            
+            const terms = document.getElementById('terms').checked;
+            if (!terms) {
+                showNotification('Terms Required', 'Please agree to the Terms and Conditions.', 'warning');
+                return;
+            }
+            
+            // Show loading state
+            const btn = document.getElementById('place-order-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoading = document.getElementById('btn-loading');
+            
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+
+            // Show processing notification
+            showNotification('Processing Order', 'Please wait while we process your order...', 'info');
+            
+            try {
+                // Simulate secure processing delay
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Collect and sanitize form data
+                const formData = {
+                    fullName: sanitizeInput(document.getElementById('full-name').value),
+                    email: sanitizeInput(document.getElementById('email').value),
+                    phone: sanitizeInput(document.getElementById('phone').value),
+                    address: sanitizeInput(document.getElementById('address').value),
+                    city: sanitizeInput(document.getElementById('city').value),
+                    postalCode: sanitizeInput(document.getElementById('postal-code').value)
+                };
+                
+                // Calculate order totals
+                let subtotal = 0;
+                cartItems.forEach(item => {
+                    let price = 0;
+                    if (typeof item.price === 'string') {
+                        const priceMatch = item.price.match(/(\d+[.,]?\d*)/);
+                        if (priceMatch) {
+                            price = parseFloat(priceMatch[0].replace(',', ''));
+                        }
+                    } else if (typeof item.price === 'number') {
+                        price = item.price;
+                    }
+                    subtotal += price * (item.quantity || 1);
+                });
+                
+                const shipping = 500.00;
+                const total = subtotal + shipping;
+                
+                // Get payment method details
+                let paymentDetails = '';
+                let paymentInstructions = '';
+                
+                switch(selectedPaymentMethod) {
+                    case 'cod':
+                        paymentDetails = 'Cash on Delivery';
+                        paymentInstructions = 'Payment will be collected upon delivery';
+                        break;
+                    case 'bank':
+                        paymentDetails = 'Bank Transfer';
+                        paymentInstructions = 'Please transfer the amount to our bank account and email the receipt to payments@paradyze.com';
+                        break;
+                    case 'card':
+                        paymentDetails = 'Credit/Debit Card';
+                        paymentInstructions = 'Your card payment has been processed successfully';
+                        break;
+                }
+                
+                // Prepare secure order data
+                const orderData = {
+                    orderId: 'ORD' + Math.floor(10000 + Math.random() * 90000),
+                    customerInfo: formData,
+                    items: cartItems.map(item => ({
+                        name: sanitizeInput(item.name),
+                        price: item.price,
+                        quantity: item.quantity,
+                        image: item.image
+                    })),
+                    financials: {
+                        subtotal: subtotal,
+                        shipping: shipping,
+                        total: total
+                    },
+                    paymentMethod: paymentDetails,
+                    paymentType: selectedPaymentMethod,
+                    paymentInstructions: paymentInstructions,
+                    security: {
+                        csrfToken: SECURITY_CONFIG.csrfToken,
+                        timestamp: Date.now(),
+                        sessionId: Math.random().toString(36).substr(2, 9)
+                    },
+                    orderDate: new Date().toISOString(),
+                    deliveryEstimate: '3 to 5 working days'
+                };
+                
+                // Encrypt sensitive data before storage
+                const encryptedOrderData = encryptData(orderData);
+                
+                // Save encrypted order data
+                localStorage.setItem('paradyzeOrderData', encryptedOrderData);
+                
+                // Clear cart
+                localStorage.removeItem('paradyzeCart');
+                cartItems = [];
+                
+                // Update UI
+                updateCartCount();
+                updateOrderSummary();
+                
+                // Reset security state on successful order
+                securityState.attempts = 0;
+                
+                // Show success notification
+                showNotification(
+                    'Order Successful! 🎉', 
+                    `Thank you for shopping with Paradyze! Your order #${orderData.orderId} has been placed successfully.`,
+                    'success'
+                );
+                
+                // Redirect to confirmation after delay
+                setTimeout(() => {
+                    window.location.href = 'order-confirm.html';
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Security: Order processing error', error);
+                showNotification('Payment Failed', 'An error occurred while processing your order. Please try again.', 'error');
+                
+                // Update security state on failure
+                securityState.attempts++;
+                securityState.lastAttempt = Date.now();
+                
+            } finally {
+                // Reset button state
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+        });
+
+        // Initialize the checkout page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCheckout();
+            
+            // Payment method selection
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = true;
+                    
+                    const method = this.dataset.method;
+                    handlePaymentSelection(method);
+                });
+            });
+            
+            // Add security event listeners
+            window.addEventListener('beforeunload', function() {
+                // Clear sensitive data if needed
+            });
+        });
+    </script>
+    <script src="/Assets/js/auth.js"></script>
+</body>
+</html>

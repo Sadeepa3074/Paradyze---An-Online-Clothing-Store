@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - Paradyze</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 7.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #183F35;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .header-icons .icon {
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .icon {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 70vh;
+        }
+
+        .page-header {
+            text-align: left;
+            margin-bottom: 40px;
+            gap: 1rem;
+            color:#000000;
+        }
+
+        .page-title {
+            font-size: 32px;
+            color: #000000;
+            margin-bottom: 0px;
+        }
+
+        .page-subtitle {
+            color: #183F35;
+            font-size: 16px;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 30px 0;
+        }
+
+        /* Empty Wishlist State */
+        .empty-wishlist {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-wishlist h2 {
+            font-size: 24px;
+            color: #F44336;
+            margin-bottom: 20px;
+        }
+
+        .empty-wishlist p {
+            color: #888;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .shop-now-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #183F35;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .shop-now-btn:hover {
+            background: #0f2c24;
+            transform: translateY(-2px);
+        }
+
+        /* Wishlist Items */
+        .wishlist-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .wishlist-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+        .wishlist-item:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+            font-size: 1.2rem;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: #e74c3c;
+        }
+
+        .remove-btn:hover {
+            transform: scale(1.1);
+            background: #e74c3c;
+            color: white;
+        }
+
+        .product-info {
+            padding: 20px;
+            background: white;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #000000;
+            font-size: 1.1rem;
+        }
+
+        .product-category {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.75rem;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: white;
+            color: #183F35;
+            border: 1px solid #183F35;
+        }
+
+        .out-of-stock {
+            width: 100%;
+            padding: 0.75rem;
+            background: #ccc;
+            color: #666;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: not-allowed;
+        }
+
+
+        /* Footer */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 16px;
+            color: #ffffff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wishlist-items {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            nav ul {
+                gap: 1.5rem;
+            }
+            
+            .header-icons {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 1rem; color: inherit;">
+                    <img src="../assets/logo.jpg" alt="Paradyze Logo" class="logo-image">
+                    <div class="logo-text">
+                        <h1>PARADYZE</h1>
+                        <p>Your Style, Our Passion</p>
+                    </div>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="search.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="icon active">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <a href="login.html" class="icon" id="user-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">My Wishlist</h1>
+            <p class="page-subtitle">Your favourite items saved for later.</p>
+        </div>
+
+        <!-- Wishlist Items Container -->
+        <div id="wishlist-items-container">
+            <!-- Items will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="../Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="../Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="../Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templers Road, Mount Lavinia, Sri Lanka
+                </div><hr>
+                <div class="contact-item">
+                    📞 011 288 6837
+                </div><hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Paradyze. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    // Cart functionality
+    let cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+    
+    // Update cart count
+    function updateCartCount() {
+        const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            cartCount.textContent = totalItems;
+        }
+    }
+    
+    // Check login status
+    function checkLoginStatus() {
+        const token = localStorage.getItem('token');
+        const userIcon = document.getElementById('user-icon');
+        
+        if (token) {
+            // User is logged in
+            const user = JSON.parse(localStorage.getItem('user'));
+            userIcon.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span style="font-size: 0.7rem; position: absolute; bottom: -8px; right: -5px;">👤</span>
+            `;
+            userIcon.href = 'profile.html';
+        }
+    }
+
+    // Wishlist functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+        checkLoginStatus();
+        loadWishlistItems();
+        
+        // Add event listener for the shop now button
+        const shopNowBtn = document.getElementById('shop-now-btn');
+        if (shopNowBtn) {
+            shopNowBtn.addEventListener('click', function() {
+                window.location.href = 'shop.html';
+            });
+        }
+    });
+
+    function loadWishlistItems() {
+        const wishlistItems = JSON.parse(localStorage.getItem('paradyzeWishlist')) || [];
+        const container = document.getElementById('wishlist-items-container');
+        
+        if (wishlistItems.length === 0) {
+            // Show empty state
+            container.innerHTML = `
+                <div class="empty-wishlist">
+                    <h2>Your wishlist is empty!</h2>
+                    <p>Start adding your favourite products to see them here.</p>
+                    <button id="shop-now-btn" class="shop-now-btn">Shop Now</button>
+                </div>
+            `;
+        } else {
+            // Show wishlist items
+            container.innerHTML = `
+                <div class="wishlist-items">
+                    ${wishlistItems.map(item => `
+                        <div class="wishlist-item" data-id="${item.id}">
+                            <div class="product-image">
+                                <img src="${item.image}" alt="${item.name}">
+                                <button class="remove-btn" onclick="removeFromWishlist(${item.id})">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">${item.name}</h3>
+                                <p class="product-category">${item.category}</p>
+                                <div class="product-price">${item.price}</div>
+                                ${item.inStock ? 
+                                    `<button class="add-to-cart" onclick="addToCartFromWishlist(${item.id})">Add to cart</button>` : 
+                                    `<button class="out-of-stock" disabled>Out of stock</button>`
+                                }
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    }
+
+    function removeFromWishlist(productId) {
+        console.log('Removing product ID:', productId);
+        
+        let wishlistItems = JSON.parse(localStorage.getItem('paradyzeWishlist')) || [];
+        console.log('Before removal:', wishlistItems);
+        
+        // Convert productId to number for comparison
+        const productIdNum = Number(productId);
+        
+        // Filter out the item to remove
+        wishlistItems = wishlistItems.filter(item => {
+            // Convert item.id to number for comparison
+            const itemIdNum = Number(item.id);
+            return itemIdNum !== productIdNum;
+        });
+        
+        console.log('After removal:', wishlistItems);
+        
+        // Save back to localStorage
+        localStorage.setItem('paradyzeWishlist', JSON.stringify(wishlistItems));
+        
+        // Show confirmation message
+        showRemovalMessage();
+        
+        // Reload the wishlist display
+        loadWishlistItems();
+    }
+
+    function showRemovalMessage() {
+        // Create a temporary notification
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.textContent = 'Item removed from wishlist';
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    function addToCartFromWishlist(productId) {
+        const wishlistItems = JSON.parse(localStorage.getItem('paradyzeWishlist')) || [];
+        const productIdNum = Number(productId);
+        const product = wishlistItems.find(item => Number(item.id) === productIdNum);
+        
+        if (product) {
+            let cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+            const existingItem = cartItems.find(item => Number(item.id) === productIdNum);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('paradyzeCart', JSON.stringify(cartItems));
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Show success message
+            showAddToCartMessage(product.name);
+        }
+    }
+
+    function showAddToCartMessage(productName) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #183F35;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.textContent = `${productName} added to cart!`;
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Add CSS animations for notifications
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+<script src="/Assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Paradyze</title>
+    <style>
+        /* Reset and Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 7.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #183F35;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .header-icons .icon {
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .icon {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Cart Section */
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 60vh;
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .cart-title {
+            font-size: 32px;
+            color: #000000;
+            margin-bottom: 0px;
+            text-align: left;
+        }
+
+        .cart-subtitle {
+            color: #183F35;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .cart-items {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px 0;
+            border-bottom: 1px solid #eee;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .item-image {
+            width: 100px;
+            height: 120px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details {
+            flex: 10;
+        }
+
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0rem;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .item-price {
+            font-size: 1.1rem;
+            color: #F44336;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #183F35;
+            background: white;
+            color: #183F35;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #183F35;
+            color: white;
+        }
+
+        .quantity-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #F44336;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            transition: color 0.3s;
+            margin-top: 5px;
+            margin-left: auto; 
+            display: block; 
+            text-align: right;
+            width: fit-content;
+            margin-left: auto; 
+            margin-right: 0;
+        }
+
+        .remove-btn:hover {
+            color: #c0392b;
+        }
+
+        .cart-summary {
+            max-width: 800px;
+            margin: 40px auto 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .summary-total {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #000000;
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        .checkout-btn:hover {
+            background: white;
+            color: #183F35;
+            border: 2px solid #183F35;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-cart-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-cart h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        .continue-shopping {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #183F35;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .continue-shopping:hover {
+            background: white;
+            color: #183F35;
+            border: 2px solid #183F35;
+        }
+
+        /* Footer */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .quantity-controls {
+                justify-content: center;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1.5rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 1rem; color: inherit;">
+                    <img src="../Assets/Logo.jpg" alt="Paradyze Logo" class="logo-image">
+                    <div class="logo-text">
+                        <h1>PARADYZE</h1>
+                        <p>Your Style, Our Passion</p>
+                    </div>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="search.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="icon active">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <a href="login.html" class="icon" id="user-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Section -->
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1 class="cart-title">Your Shopping Cart</h1>
+            <p class="cart-subtitle">Review your items before proceeding to checkout</p>
+        </div>
+
+        <div class="cart-items" id="cart-items">
+            <!-- Empty Cart State (Default) -->
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛒</div>
+                <h3>Your cart is empty</h3>
+                <p>Add some stylish items to get started!</p>
+                <a href="shop.html" class="continue-shopping">Continue Shopping</a>
+            </div>
+        </div>
+
+        <!-- Cart Summary (Hidden when empty) -->
+        <div class="cart-summary" id="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">Rs. 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping:</span>
+                <span id="shipping">Rs. 0.00</span>
+            </div>
+            <div class="summary-row summary-total">
+                <span>Total:</span>
+                <span id="total">Rs. 0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="../Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="../Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="../Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templars Road, Mount Lavinia, Sri Lanka
+                </div><hr>
+                <div class="contact-item">
+                    📞 011 268 8837
+                </div><hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Paradyze. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Cart data structure
+        let cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+        
+        // Check login status
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const userIcon = document.getElementById('user-icon');
+            
+            if (token) {
+                // User is logged in
+                const user = JSON.parse(localStorage.getItem('user'));
+                userIcon.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 0.7rem; position: absolute; bottom: -8px; right: -5px;">👤</span>
+                `;
+                userIcon.href = 'profile.html';
+            }
+        }
+
+        // Load cart items on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            checkLoginStatus();
+            loadCartItems();
+        });
+
+        // Load cart items from localStorage
+        function loadCartItems() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSummary = document.getElementById('cart-summary');
+            
+            if (cartItems.length === 0) {
+                // Show empty cart
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some stylish items to get started!</p>
+                        <a href="shop.html" class="continue-shopping">Continue Shopping</a>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+            } else {
+                // Show cart items
+                cartItemsContainer.innerHTML = '';
+                cartItems.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    
+                    // Calculate total price for this item
+                    const originalPrice = parseFloat(item.price.replace('Rs. ', '').replace(',', ''));
+                    const totalPrice = originalPrice * (item.quantity || 1);
+                    
+                    cartItem.innerHTML = `
+                        <div class="item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">${item.name}</h3>
+                            <div class="item-price">Rs. ${totalPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="quantity-display">${item.quantity || 1}</span>
+                                <button class="quantity-btn plus" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItem);
+                });
+                cartSummary.style.display = 'block';
+                updateCartTotal();
+            }
+            
+            // Update cart count after loading items
+            updateCartCount();
+        }
+
+        // Update quantity and recalculate price
+        function updateQuantity(index, change) {
+            if (!cartItems[index].quantity) {
+                cartItems[index].quantity = 1;
+            }
+            
+            cartItems[index].quantity += change;
+            
+            if (cartItems[index].quantity <= 0) {
+                removeFromCart(index);
+            } else {
+                localStorage.setItem('paradyzeCart', JSON.stringify(cartItems));
+                loadCartItems(); // Reload to update all displays
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            localStorage.setItem('paradyzeCart', JSON.stringify(cartItems));
+            loadCartItems();
+        }
+
+        // Update cart total
+        function updateCartTotal() {
+            let subtotal = 0;
+            
+            cartItems.forEach(item => {
+                // Extract numeric price from string like "Rs. 2,800.00"
+                const price = parseFloat(item.price.replace('Rs. ', '').replace(',', ''));
+                const quantity = item.quantity || 1;
+                subtotal += price * quantity;
+            });
+            
+            const shipping = subtotal > 0 ? 500 : 0;
+            const total = subtotal + shipping;
+            
+            document.getElementById('subtotal').textContent = `Rs. ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('shipping').textContent = `Rs. ${shipping.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('total').textContent = `Rs. ${total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        // Proceed to checkout - redirects to checkout page with cart data
+        function proceedToCheckout() {
+            if (cartItems.length > 0) {
+                console.log('Cart items before redirect:', cartItems);
+                
+                // Clean cart data before saving
+                const cleanCartItems = cartItems.map(item => {
+                    return {
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        image: item.image,
+                        quantity: item.quantity || 1
+                    };
+                });
+                
+                // Save cart data to localStorage for the checkout page
+                localStorage.setItem('paradyzeCart', JSON.stringify(cleanCartItems));
+                
+                // Verify data was saved
+                const savedData = localStorage.getItem('paradyzeCart');
+                console.log('Saved to localStorage:', savedData);
+                
+                // Force a small delay to ensure localStorage is updated
+                setTimeout(() => {
+                    window.location.href = 'checkout.html';
+                }, 100);
+                
+            } else {
+                alert('Your cart is empty. Please add items to your cart before proceeding to checkout.');
+            }
+        }
+
+        // Function to add item to cart
+        function addToCart(productId, productName, productPrice, productImage) {
+            const existingItem = cartItems.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('paradyzeCart', JSON.stringify(cartItems));
+            
+            // Show confirmation
+            alert(`${productName} added to cart!`);
+            
+            // Update cart count
+            updateCartCount();
+            
+            // If on cart page, reload the cart
+            if (window.location.pathname.includes('cart.html')) {
+                loadCartItems();
+            }
+        }
+    </script>
+    <script src="/Assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradyze - Fashion for Your Comfort and Confidence</title>
+    <style>
+        /* Reset and Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 7.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #183F35;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #183F35;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .header-icons .icon {
+            position: relative;
+        }
+
+        .icon {
+            cursor: pointer;
+            transition: transform 0.3s;
+            color: #000000;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+
+        .hero {
+        width: 100%;
+        background: #fff;
+        padding: 0;
+        margin: 0;
+        }
+
+        .hero-container {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        gap: 0;
+        width: 100%;
+        }
+
+        .hero-box {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+        }
+
+        .hero-box img {
+        width: 100%;
+        height: 100vh; /* full viewport height */
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+        }
+
+       .hero-content {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 300;
+        }
+        
+        .hero-cta {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .hero-cta:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .shop-now-btn {
+            background: #183F35;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .shop-now-btn:hover {
+            background: white;
+            color: black;
+            border: 2px solid black;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            color: #000000;
+        }
+
+        .section-subtitle {
+            color: #183F35;
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .category-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            height: 300px;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 1.5rem;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7));
+        }
+
+        .category-label {
+            position: absolute;
+            color: rgb(0, 0, 0);
+            font-weight: 600;
+            font-size: 1.1rem;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 120%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            filter: brightness(1.05);
+        }
+
+        /* Category Background Colors */
+        .cat-dresses {
+            background: linear-gradient(135deg, #8eb3a8, #6a9988);
+        }
+
+        .cat-tops {
+            background: linear-gradient(135deg, #d49ba5, #c17886);
+        }
+
+        .cat-shorts {
+            background: linear-gradient(135deg, #a8c5b8, #8aab9a);
+        }
+
+        .cat-pants {
+            background: linear-gradient(135deg, #e8c4a9, #d9a783);
+        }
+
+        .cat-skirts {
+            background: linear-gradient(135deg, #b3d4c5, #95baa8);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+            font-size: 1.2rem;
+        }
+
+        .wishlist-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #000000;
+        }
+
+        .product-subtitle {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .product-price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .view-product-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .view-product-btn:hover {
+            background: white;
+            color: black;
+            border: 2px solid black;
+        }
+
+        .view-all-btn {
+            display: block;
+            margin: 3rem auto 0;
+            padding: 1rem 3rem;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .view-all-btn:hover {
+            background: white;
+            color: black;
+            border: 2px solid black;
+        }
+
+        /* Product Image Variations */
+        .prod-red {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        }
+
+        .prod-white {
+            background: linear-gradient(135deg, #f0f0f0, #e8f5e8);
+        }
+
+        .prod-outdoor {
+            background: linear-gradient(135deg, #a8d5ba, #8bc4a8);
+        }
+
+        .prod-brown {
+            background: linear-gradient(135deg, #d4a574, #c9965f);
+        }
+
+        /* Promo Banner */
+        .promo-banner {
+            background: linear-gradient(135deg, #FFBEF7, #ffb3db);
+            padding: 2.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: #f8f8f8;
+            padding: 30px 0;
+        }
+
+        .newsletter-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-size: 2rem;
+            color: #183F35;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .subscribe-btn {
+            padding: 1rem 2rem;
+            background: #1a4d3a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .subscribe-btn:hover {
+            background: #144131;
+        }
+
+        .privacy-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Footer */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+
+        }
+
+        .horizontal-rule {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #bdc3c7, transparent);
+            margin: 0 auto 20px; 
+            width: 80%;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 1rem; color: inherit;">
+                    <img src="../assets/logo.jpg" alt="Paradyze Logo" class="logo-image">
+                    <div class="logo-text">
+                        <h1>PARADYZE</h1>
+                        <p>Your Style, Our Passion</p>
+                    </div>
+                </a>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="search.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <!-- FIXED LOGIN LINK - Changed from /Customer/login.html to login.html -->
+                <a href="login.html" class="icon" id="user-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+    <div class="hero-container">
+        <div class="hero-box">
+        <img src="../assets/hero1.jpg" alt="Hero Image 1">
+        </div>
+        <div class="hero-box">
+        <img src="../assets/hero2.jpg" alt="Hero Image 2">
+        </div>
+        <div class="hero-content">
+                <h1 class="hero-title">" DISCOVER YOUR PERFECT STYLE "</h1>
+                <p class="hero-subtitle">Fashion that fits your comfort and confidence.</p>
+    </div>
+    </section>
+
+    <button class="shop-now-btn">Shop Now</button>
+
+    <!-- Shop by Category -->
+    <section class="section">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="category-grid">
+            <div class="category-card cat-dresses">
+                <img src="../Assets/0094.JPG" alt="Dresses">
+                <div class="category-label">Dresses</div>
+            </div>
+            <div class="category-card cat-tops">
+                <img src="../Assets/IMG_6620.JPG" alt="Tops">
+                <div class="category-label">Tops</div>
+            </div>
+            <div class="category-card cat-shorts">
+                <div class="category-label">Shorts</div>
+                <img src="../Assets/0014.JPG" alt="Shorts">
+            </div>
+            <div class="category-card cat-pants">
+                <div class="category-label">Pants</div>
+                <img src="../Assets/IMG_6624.JPG" alt="Pants">
+            </div>
+            <div class="category-card cat-skirts">
+                <div class="category-label">Skirts</div>
+                <img src="../Assets/0148.JPG" alt="Skirts">
+            </div>
+        </div>
+        <p class="section-subtitle">Explore our latest fashion collections by category.</p>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="section">
+        <h2 class="section-title">Best Sellers</h2>
+        <div class="products-grid">
+            <!-- Victoria Tiered Dress -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../Assets/IMG_6626.JPG" alt="Victoria Tiered Dress">
+                    <button class="wishlist-btn">❤️</button>
+                </div>
+                <div class="product-info">
+                    <div class="product-title">Victoria Tiered Dress</div>
+                    <div class="product-subtitle">Dresses</div>
+                    <div class="product-price">Rs. 6890.00</div>
+                    <button class="view-product-btn" data-product="victoria-tiered-dress">View Product</button>
+                </div>
+            </div>
+            
+            <!-- Eva Wrap Dress -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../Assets/IMG_6615.JPG" alt="Eva Wrap Dress">
+                    <button class="wishlist-btn">❤️</button>
+                </div>
+                <div class="product-info">
+                    <div class="product-title">Eva Wrap Dress</div>
+                    <div class="product-subtitle">Dresses</div>
+                    <div class="product-price">Rs. 5490.00</div>
+                    <button class="view-product-btn" data-product="eva-wrap-dress">View Product</button>
+                </div>
+            </div>
+            
+            <!-- Paisley Skirt -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../Assets/0123.JPG" alt="Paisley Skirt">
+                    <button class="wishlist-btn">❤️</button>
+                </div>
+                <div class="product-info">
+                    <div class="product-title">Paisley Skirt</div>
+                    <div class="product-subtitle">Skirts</div>
+                    <div class="product-price">Rs. 2800.00</div>
+                    <button class="view-product-btn" data-product="paisley-skirt">View Product</button>
+                </div>
+            </div>
+            
+            <!-- Summer Vacay Dress -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../Assets/0149.JPG" alt="Summer Vacay Dress">
+                    <button class="wishlist-btn">❤️</button>
+                </div>
+                <div class="product-info">
+                    <div class="product-title">Summer Vacay Dress</div>
+                    <div class="product-subtitle">Dresses</div>
+                    <div class="product-price">Rs. 4500.00</div>
+                    <button class="view-product-btn" data-product="summer-vacay-dress">View Product</button>
+                </div>
+            </div>
+        </div>
+        <button class="view-all-btn">View All Products</button>
+    </section>
+
+    <!-- Promo Banner -->
+    <div class="promo-banner">
+        🎁⚡ Get 10% off your first order — Use code WELCOME10 ⚡🎁
+    </div>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="newsletter-content">
+            <h2>Stay Updated with Paradyze</h2>
+            <p>Subscribe to get exclusive deals & the latest arrivals</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Enter your Email">
+                <button type="submit" class="subscribe-btn">Subscribe</button>
+            </form>
+            <p class="privacy-note">We respect your privacy — unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="../Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="../Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="../Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templers Road, Mount Lavinia, Sri Lanka
+                </div><hr>
+                <div class="contact-item">
+                    📞 011 288 6837
+                </div><hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Paradyze. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+    // Update cart count
+    function updateCartCount() {
+        const cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+        const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            cartCount.textContent = totalItems;
+        }
+    }
+
+    // Wishlist functionality for home page
+    function addToWishlist(productId, productName, productPrice, productImage, productCategory) {
+        let wishlistItems = JSON.parse(localStorage.getItem('paradyzeWishlist')) || [];
+        const existingItem = wishlistItems.find(item => item.id == productId);
+        
+        if (!existingItem) {
+            wishlistItems.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                image: productImage,
+                category: productCategory,
+                inStock: true
+            });
+            
+            localStorage.setItem('paradyzeWishlist', JSON.stringify(wishlistItems));
+            alert(`${productName} added to wishlist!`);
+        } else {
+            alert(`${productName} is already in your wishlist!`);
+        }
+    }
+
+    // Product mapping for the 4 best sellers
+    const bestSellerProducts = {
+        'victoria-tiered-dress': {
+            id: 9,
+            name: "Victoria Tiered Dress",
+            category: "Dresses",
+            price: "Rs. 6890.00"
+        },
+        'eva-wrap-dress': {
+            id: 8,
+            name: "Eva Wrap Dress", 
+            category: "Dresses",
+            price: "Rs. 5490.00"
+        },
+        'paisley-skirt': {
+            id: 1,
+            name: "Paisley Skirt",
+            category: "Skirts",
+            price: "Rs. 2800.00"
+        },
+        'summer-vacay-dress': {
+            id: 2,
+            name: "Summer Vacay Dress",
+            category: "Dresses",
+            price: "Rs. 4500.00"
+        }
+    };
+
+    // Redirect to product details page
+    function goToProductDetails(productSlug) {
+        const product = bestSellerProducts[productSlug];
+        if (product) {
+            // Redirect to product page with ID in URL
+            window.location.href = `product.html?id=${product.id}`;
+        } else {
+            console.error('Product not found:', productSlug);
+            window.location.href = 'shop.html';
+        }
+    }
+
+    // Newsletter subscription functionality
+    function handleNewsletterSubscription(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        const emailInput = document.querySelector('.newsletter-input');
+        const email = emailInput.value.trim();
+        
+        // Simple email validation
+        if (!email) {
+            showNewsletterNotification('Please enter your email address.', 'error');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            showNewsletterNotification('Please enter a valid email address.', 'error');
+            return;
+        }
+        
+        // Store the email in localStorage (you can replace this with actual API call)
+        let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers')) || [];
+        if (!subscribers.includes(email)) {
+            subscribers.push(email);
+            localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+        }
+        
+        // Show success notification
+        showNewsletterNotification('Thank you for subscribing!', 'success');
+        
+        // Clear the input
+        emailInput.value = '';
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function showNewsletterNotification(message, type) {
+        // Remove any existing notification
+        const existingNotification = document.querySelector('.newsletter-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+        
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `newsletter-notification newsletter-${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: ${type === 'success' ? '#183F35' : '#e74c3c'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+        `;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 5 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 5000);
+    }
+
+    // Add CSS animations for notifications
+    const newsletterStyle = document.createElement('style');
+    newsletterStyle.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        .newsletter-notification {
+            font-family: 'Poppins', sans-serif;
+        }
+    `;
+    document.head.appendChild(newsletterStyle);
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+        
+        // View Product buttons
+        document.querySelectorAll('.view-product-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productSlug = this.getAttribute('data-product');
+                goToProductDetails(productSlug);
+            });
+        });
+        
+        // Wishlist buttons
+        document.querySelectorAll('.wishlist-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productCard = this.closest('.product-card');
+                const productName = productCard.querySelector('.product-title').textContent;
+                const productPrice = productCard.querySelector('.product-price').textContent;
+                const productImage = productCard.querySelector('img').src;
+                const productCategory = productCard.querySelector('.product-subtitle').textContent;
+                const productId = Date.now(); // Generate unique ID
+                
+                addToWishlist(productId, productName, productPrice, productImage, productCategory);
+            });
+        });
+        
+        // Shop Now button
+        document.querySelector('.shop-now-btn').addEventListener('click', function() {
+            window.location.href = 'shop.html';
+        });
+        
+        // View All Products button
+        document.querySelector('.view-all-btn').addEventListener('click', function() {
+            window.location.href = 'shop.html';
+        });
+        
+        // Category cards - redirect to shop page with category filter
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const category = this.querySelector('.category-label').textContent;
+                // Store the selected category in localStorage for the shop page to use
+                localStorage.setItem('selectedCategory', category);
+                window.location.href = 'shop.html';
+            });
+        });
+
+        // Newsletter form submission
+        const newsletterForm = document.querySelector('.newsletter-form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', handleNewsletterSubscription);
+        }
+
+        // Debug: Check if user icon is working
+        const userIcon = document.getElementById('user-icon');
+        if (userIcon) {
+            console.log('User icon found, href:', userIcon.href);
+            userIcon.addEventListener('click', function(e) {
+                console.log('User icon clicked');
+            });
+        } else {
+            console.error('User icon not found!');
+        }
+    });
+</script>
+<script src="/Assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Paradyze</title>
+    <style>
+        /* Reset and Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 7.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #183F35;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .header-icons .icon {
+            position: relative;
+        }
+
+        .icon {
+            cursor: pointer;
+            transition: transform 0.3s;
+            color: #000000;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Search Section */
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 70vh;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .search-title {
+            font-size: 2.5rem;
+            color: #000000;
+            margin-bottom: 1rem;
+        }
+
+        .search-subtitle {
+            color: #183F35;
+            font-size: 1.1rem;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #183F35;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #0f2c24;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #183F35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .search-button:hover {
+            background: #0f2c24;
+        }
+
+        /* Search Results */
+        .search-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .no-results p {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Product Card Styles */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+            font-size: 1.2rem;
+        }
+
+        .wishlist-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #000000;
+        }
+
+        .product-subtitle {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .product-price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.75rem;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: white;
+            color: black;
+            border: 2px solid black;
+        }
+
+        /* Search Stats */
+        .search-stats {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-title {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .search-results {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 1rem; color: inherit;">
+                    <img src="../assets/logo.jpg" alt="Paradyze Logo" class="logo-image">
+                    <div class="logo-text">
+                        <h1>PARADYZE</h1>
+                        <p>Your Style, Our Passion</p>
+                    </div>
+                </a>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="search.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <a href="login.html" class="icon" id="user-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-container">
+        <div class="search-header">
+            <h1 class="search-title">Search Products</h1>
+            <p class="search-subtitle">Find your perfect style from our collection</p>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Search for dresses, tops, skirts, pants..." id="searchInput">
+            <button class="search-button" onclick="performSearch()">Search</button>
+        </div>
+
+        <div class="search-stats" id="searchStats">
+            <!-- Search statistics will appear here -->
+        </div>
+
+        <div id="searchResults" class="search-results">
+            <!-- Search results will appear here -->
+            <div class="no-results">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="../Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="../Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="../Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templers Road, Mount Lavinia, Sri Lanka
+                </div><hr>
+                <div class="contact-item">
+                    📞 011 288 6837
+                </div><hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Paradyze. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // All 11 Products Database
+        const products = [
+            {
+                id: 1,
+                name: "Paisley Skirt",
+                category: "Skirts",
+                price: "Rs. 2800.00",
+                image: "../Assets/products/0068.JPG",
+                tags: ["skirt", "paisley", "pattern", "casual", "floral"]
+            },
+            {
+                id: 2,
+                name: "Summer Vacay Dress",
+                category: "Dresses",
+                price: "Rs. 4500.00",
+                image: "../Assets/products/0182.JPG",
+                tags: ["dress", "summer", "vacation", "beach", "casual"]
+            },
+            {
+                id: 3,
+                name: "Paisley Skinny Top",
+                category: "Tops",
+                price: "Rs. 2500.00",
+                image: "../Assets/products/0132.JPG",
+                tags: ["top", "skinny", "paisley", "casual", "floral"]
+            },
+            {
+                id: 4,
+                name: "Full Strap Dress",
+                category: "Dresses",
+                price: "Rs. 5000.00",
+                image: "../Assets/products/0164.JPG",
+                tags: ["dress", "strap", "evening", "formal", "elegant"]
+            },
+            {
+                id: 5,
+                name: "Chic Ruffle Skirt",
+                category: "Skirts",
+                price: "Rs. 3200.00",
+                image: "../Assets/products/0137.JPG",
+                tags: ["skirt", "ruffle", "chic", "elegant", "feminine"]
+            },
+            {
+                id: 6,
+                name: "Athena Strap Top",
+                category: "Tops",
+                price: "Rs. 2700.00",
+                image: "../Assets/products/0027.JPG",
+                tags: ["top", "strap", "casual", "summer", "shoulder"]
+            },
+            {
+                id: 7,
+                name: "Divine Halter Neck Top",
+                category: "Tops",
+                price: "Rs. 3290.00",
+                image: "../Assets/products/IMG_6621.JPG",
+                tags: ["top", "halter", "neck", "divine", "elegant"]
+            },
+            {
+                id: 8,
+                name: "Eva Wrap Dress",
+                category: "Dresses",
+                price: "Rs. 5490.00",
+                image: "../Assets/products/IMG_6615.JPG",
+                tags: ["dress", "wrap", "casual", "summer", "elegant"]
+            },
+            {
+                id: 9,
+                name: "Victoria Tiered Dress",
+                category: "Dresses",
+                price: "Rs. 6890.00",
+                image: "../Assets/products/IMG_6474.JPG",
+                tags: ["dress", "tiered", "victoria", "formal", "elegant"]
+            },
+            {
+                id: 10,
+                name: "Emerald Chic Short",
+                category: "Shorts",
+                price: "Rs. 2890.00",
+                image: "../Assets/products/IMG_6632.JPG",
+                tags: ["shorts", "emerald", "chic", "casual", "summer"]
+            },
+            {
+                id: 11,
+                name: "Luxe Flow Wide-Leg Pants",
+                category: "Pants",
+                price: "Rs. 3890.00",
+                image: "../Assets/products/IMG_6625.JPG",
+                tags: ["pants", "wide-leg", "luxe", "flow", "elegant"]
+            }
+        ];
+
+        // Update cart count
+        function updateCartCount() {
+            const cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        // Add to cart functionality
+        function addToCart(productId, productName, productPrice, productImage) {
+            let cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+            const existingItem = cartItems.find(item => item.id == productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('paradyzeCart', JSON.stringify(cartItems));
+            updateCartCount();
+        }
+
+        // Wishlist functionality
+        function addToWishlist(productId, productName, productPrice, productImage, productCategory) {
+            let wishlistItems = JSON.parse(localStorage.getItem('paradyzeWishlist')) || [];
+            const existingItem = wishlistItems.find(item => item.id == productId);
+            
+            if (!existingItem) {
+                wishlistItems.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    category: productCategory,
+                    inStock: true
+                });
+                
+                localStorage.setItem('paradyzeWishlist', JSON.stringify(wishlistItems));
+            }
+        }
+
+        // Search functionality
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('searchResults');
+            const statsContainer = document.getElementById('searchStats');
+            
+            if (!searchTerm) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <h3>Please enter a search term</h3>
+                        <p>Try searching for "dresses", "tops", "skirts", etc.</p>
+                    </div>
+                `;
+                statsContainer.innerHTML = '';
+                return;
+            }
+
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.category.toLowerCase().includes(searchTerm) ||
+                product.tags.some(tag => tag.includes(searchTerm))
+            );
+
+            if (filteredProducts.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <h3>No products found for "${searchTerm}"</h3>
+                        <p>Try different keywords or browse our categories</p>
+                    </div>
+                `;
+                statsContainer.innerHTML = `Showing 0 results for "${searchTerm}"`;
+            } else {
+                statsContainer.innerHTML = `Showing ${filteredProducts.length} result${filteredProducts.length > 1 ? 's' : ''} for "${searchTerm}"`;
+                
+                resultsContainer.innerHTML = filteredProducts.map(product => `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}">
+                            <button class="wishlist-btn" onclick="addToWishlist(${product.id}, '${product.name}', '${product.price}', '${product.image}', '${product.category}')">❤️</button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${product.name}</div>
+                            <div class="product-subtitle">${product.category}</div>
+                            <div class="product-price">${product.price}</div>
+                            <button class="add-to-cart" onclick="addToCart(${product.id}, '${product.name}', '${product.price}', '${product.image}')">Add to cart</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Auto-search if URL has query parameter
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('q');
+            if (searchQuery) {
+                document.getElementById('searchInput').value = searchQuery;
+                performSearch();
+            }
+        });
+    </script>
+    <script src="/Assets/js/auth.js"></script>
+</body>
+</html>

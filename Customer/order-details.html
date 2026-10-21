@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Paradyze</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 7.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #183F35;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .header-icons .icon {
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .icon {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .section {
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 32px;
+            color: #000000;
+            margin-bottom: 0px;
+        }
+
+        .section-subtitle {
+            color: #183F35;
+            font-size: 16px;
+            margin-bottom: 2rem;
+        }
+
+        /* Order Details Styles */
+        .order-details-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .order-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .order-info h2 {
+            color: #183F35;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-meta {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-processing { background: #fff3cd; color: #856404; }
+        .status-shipped { background: #cce7ff; color: #004085; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+
+        /* Delivery Estimate */
+        .delivery-estimate {
+            background: #e7f3ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #183F35;
+        }
+
+        .delivery-estimate h4 {
+            color: #183F35;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .delivery-estimate p {
+            color: #666;
+            margin: 0.25rem 0;
+        }
+
+        .delivery-timeframe {
+            background: #183F35;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        /* Order Tracking */
+        .tracking-section {
+            margin-top: 1.5rem;
+        }
+
+        .tracking-title {
+            font-size: 1.2rem;
+            color: #183F35;
+            margin-bottom: 1rem;
+        }
+
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .tracking-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .tracking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .step-active .step-icon {
+            background: #183F35;
+        }
+
+        .step-completed .step-icon {
+            background: #27ae60;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            text-align: center;
+            color: #666;
+        }
+
+        .step-active .step-label {
+            color: #183F35;
+            font-weight: 600;
+        }
+
+        .step-completed .step-label {
+            color: #27ae60;
+        }
+
+        .step-date {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 0.25rem;
+            text-align: center;
+        }
+
+        .tracking-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .tracking-number {
+            font-weight: 600;
+            color: #183F35;
+        }
+
+        /* Order Items */
+        .order-items {
+            width: 100%;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .items-table th {
+            text-align: left;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .items-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details h4 {
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+
+        .item-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #183F35;
+        }
+
+        .item-quantity {
+            color: #666;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+
+        .summary-title {
+            font-size: 1.2rem;
+            color: #183F35;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 500;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e0e0e0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #183F35;
+        }
+
+        /* Shipping Address */
+        .shipping-address {
+            margin-top: 2rem;
+        }
+
+        .address-title {
+            font-size: 1.1rem;
+            color: #183F35;
+            margin-bottom: 1rem;
+        }
+
+        .address-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        /* Notification Settings */
+        .notification-settings {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .notification-title {
+            font-size: 1.1rem;
+            color: #183F35;
+            margin-bottom: 1rem;
+        }
+
+        .notification-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .notification-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notification-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #183F35;
+        }
+
+        .notification-option label {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .notification-option .description {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .notification-test-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #183F35;
+            transition: all 0.3s;
+        }
+
+        .notification-test-btn:hover {
+            background: #e9ecef;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #183F35;
+            border-radius: 6px;
+            background: white;
+            color: #183F35;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            background: #183F35;
+            color: white;
+        }
+
+        .action-btn.primary {
+            background: #183F35;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #144131;
+        }
+
+        .action-btn.secondary {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 2000;
+            max-width: 400px;
+            width: 90%;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .success-message h3 {
+            color: #183F35;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .success-btn {
+            padding: 0.75rem 1.5rem;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .success-btn:hover {
+            background: #144131;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        /* Footer */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        /* Invoice Template (Hidden) */
+        .invoice-template, .delivery-slip-template {
+            position: fixed;
+            left: -9999px;
+            top: -9999px;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            background: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .invoice-header, .delivery-slip-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #183F35;
+            padding-bottom: 20px;
+        }
+
+        .invoice-header h1, .delivery-slip-header h1 {
+            color: #183F35;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .invoice-header p, .delivery-slip-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .invoice-details, .delivery-slip-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .invoice-table, .delivery-slip-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .invoice-table th, .delivery-slip-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: 600;
+        }
+
+        .invoice-table td, .delivery-slip-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .invoice-summary {
+            margin-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .summary-amount {
+            text-align: right;
+            font-weight: normal;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 18px;
+            color: #183F35;
+            border-top: 2px solid #183F35;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .total-label {
+            text-align: left;
+        }
+
+        .total-amount {
+            text-align: right;
+        }
+
+        .delivery-instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .order-details-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tracking-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .tracking-steps::before {
+                display: none;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 1rem; color: inherit;">
+                    <img src="../assets/logo.jpg" alt="Paradyze Logo" class="logo-image">
+                    <div class="logo-text">
+                        <h1>PARADYZE</h1>
+                        <p>Your Style, Our Passion</p>
+                    </div>
+                </a>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="search.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <a href="account.html" class="icon" id="user-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Order Details Section -->
+    <section class="section">
+        <h1 class="section-title">Order Details</h1>
+        <p class="section-subtitle" id="orderSubtitle">Loading order information...</p>
+        
+        <div class="order-details-container">
+            <!-- Main Order Information -->
+            <div class="order-main">
+                <!-- Order Status Card -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <h2 id="orderId">Loading...</h2>
+                            <div class="order-meta" id="orderMeta"></div>
+                        </div>
+                        <div class="order-status" id="orderStatus">Processing</div>
+                    </div>
+
+                    <!-- Delivery Estimate -->
+                    <div class="delivery-estimate" id="deliveryEstimate">
+                        <!-- Delivery estimate will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Order Tracking -->
+                    <div class="tracking-section" id="trackingSection">
+                        <h3 class="tracking-title">Order Tracking</h3>
+                        <div class="tracking-steps" id="trackingSteps">
+                            <!-- Tracking steps will be populated by JavaScript -->
+                        </div>
+                        <div class="tracking-info" id="trackingInfo">
+                            <!-- Tracking info will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div class="notification-settings">
+                        <h3 class="notification-title">Notification Preferences</h3>
+                        <div class="notification-options">
+                            <div class="notification-option">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <div>
+                                    <label for="emailNotifications">Email Notifications</label>
+                                    <div class="description">Receive order updates via email</div>
+                                </div>
+                            </div>
+                            <div class="notification-option">
+                                <input type="checkbox" id="smsNotifications">
+                                <div>
+                                    <label for="smsNotifications">SMS Notifications</label>
+                                    <div class="description">Receive order updates via SMS</div>
+                                </div>
+                            </div>
+                            <div class="notification-option">
+                                <input type="checkbox" id="statusUpdates" checked>
+                                <div>
+                                    <label for="statusUpdates">Status Updates</label>
+                                    <div class="description">Get notified when order status changes</div>
+                                </div>
+                            </div>
+                            <div class="notification-option">
+                                <input type="checkbox" id="promotionalUpdates">
+                                <div>
+                                    <label for="promotionalUpdates">Promotional Updates</label>
+                                    <div class="description">Receive special offers and promotions</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="notification-test-btn" onclick="testNotification()">Send Test Notification</button>
+                        <button class="notification-test-btn" onclick="saveNotificationSettings()" style="margin-left: 10px;">Save Settings</button>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-card">
+                    <h3>Order Items</h3>
+                    <div class="order-items">
+                        <table class="items-table" id="itemsTable">
+                            <!-- Items will be populated by JavaScript -->
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="order-history.html" class="action-btn secondary">← Back to Orders</a>
+                    <button class="action-btn" onclick="downloadInvoice()">Download Invoice</button>
+                    <button class="action-btn" onclick="downloadDeliverySlip()">Delivery Slip</button>
+                    <button class="action-btn primary" onclick="requestStatusUpdate()">Request Status Update</button>
+                </div>
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="order-summary">
+                <h3 class="summary-title">Order Summary</h3>
+                <div class="summary-details" id="summaryDetails">
+                    <!-- Summary will be populated by JavaScript -->
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="shipping-address">
+                    <h4 class="address-title">Shipping Address</h4>
+                    <div class="address-details" id="shippingAddress">
+                        <!-- Address will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="shipping-address">
+                    <h4 class="address-title">Contact Information</h4>
+                    <div class="address-details">
+                        <div id="contactEmail">Loading...</div>
+                        <div id="contactPhone" style="margin-top: 0.5rem;"></div>
+                        <button class="notification-test-btn" onclick="updateContactInfo()" style="margin-top: 1rem; width: 100%;">Update Contact Info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hidden Invoice Template -->
+    <div id="invoiceTemplate" class="invoice-template">
+        <div class="invoice-header">
+            <h1>PARADYZE</h1>
+            <p>Your Style, Our Passion</p>
+            <h2>INVOICE</h2>
+        </div>
+        
+        <div class="invoice-details">
+            <div>
+                <p><strong>Order ID:</strong> <span id="invoiceOrderId"></span></p>
+                <p><strong>Date:</strong> <span id="invoiceDate"></span></p>
+                <p><strong>Status:</strong> <span id="invoiceStatus"></span></p>
+                <p><strong>Estimated Delivery:</strong> <span id="invoiceDelivery"></span></p>
+            </div>
+        </div>
+        
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceItems">
+                <!-- Items will be populated by JavaScript -->
+            </tbody>
+        </table>
+        
+        <div class="invoice-summary">
+            <div class="summary-row">
+                <span class="summary-label">Subtotal:</span>
+                <span class="summary-amount" id="invoiceSubtotal"></span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Shipping:</span>
+                <span class="summary-amount" id="invoiceShipping"></span>
+            </div>
+            <div class="summary-total">
+                <span class="total-label">TOTAL:</span>
+                <span class="total-amount" id="invoiceTotal"></span>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Shipping Address</h3>
+            <div id="invoiceAddress" style="margin-top: 10px;"></div>
+        </div>
+        
+        <div style="margin-top: 50px; text-align: center; color: #666; font-size: 12px;">
+            <p>Thank you for your purchase!</p>
+            <p>For any inquiries, contact us at paradyzelk@gmail.com</p>
+        </div>
+    </div>
+
+    <!-- Hidden Delivery Slip Template -->
+    <div id="deliverySlipTemplate" class="delivery-slip-template">
+        <div class="delivery-slip-header">
+            <h1>PARADYZE</h1>
+            <p>Your Style, Our Passion</p>
+            <h2>DELIVERY SLIP</h2>
+        </div>
+        
+        <div class="delivery-slip-details">
+            <div>
+                <p><strong>Order ID:</strong> <span id="slipOrderId"></span></p>
+                <p><strong>Date:</strong> <span id="slipDate"></span></p>
+                <p><strong>Status:</strong> <span id="slipStatus"></span></p>
+                <p><strong>Tracking Number:</strong> <span id="slipTracking"></span></p>
+            </div>
+        </div>
+        
+        <table class="delivery-slip-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody id="slipItems">
+                <!-- Items will be populated by JavaScript -->
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 30px;">
+            <h3>Shipping Address</h3>
+            <div id="slipAddress" style="margin-top: 10px;"></div>
+        </div>
+        
+        <div class="delivery-instructions">
+            <h4>Delivery Instructions</h4>
+            <p>• Please handle package with care</p>
+            <p>• Contact customer if delivery address is inaccessible</p>
+            <p>• Obtain signature upon delivery</p>
+            <p>• Return to depot if undeliverable after 3 attempts</p>
+        </div>
+        
+        <div style="margin-top: 50px; text-align: center; color: #666; font-size: 12px;">
+            <p>For delivery inquiries, contact: 011 288 6837</p>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="overlay" id="overlay"></div>
+    <div class="success-message" id="successMessage">
+        <div class="success-icon">✓</div>
+        <h3 id="successTitle">Success!</h3>
+        <p id="successText">Operation completed successfully.</p>
+        <button class="success-btn" onclick="closeSuccessMessage()">Continue</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="../Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="../Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="../Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templers Road, Mount Lavinia, Sri Lanka
+                </div><hr>
+                <div class="contact-item">
+                    📞 011 288 6837
+                </div><hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Paradyze. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Sample order data (in real app, this would come from your backend)
+        const sampleOrders = {
+            'ORD-001': {
+                id: 'ORD-001',
+                date: '2024-01-15',
+                status: 'delivered',
+                total: 'Rs. 12,890.00',
+                subtotal: 'Rs. 12,390.00',
+                shipping: 'Rs. 500.00',
+                estimatedDelivery: '2024-01-20',
+                deliveryTimeframe: '3-5 business days',
+                actualDelivery: '2024-01-18',
+                items: [
+                    { 
+                        name: 'Victoria Tiered Dress', 
+                        image: '../Assets/IMG_6626.JPG', 
+                        price: 'Rs. 6,890.00', 
+                        quantity: 1,
+                        size: 'M'
+                    },
+                    { 
+                        name: 'Eva Wrap Dress', 
+                        image: '../Assets/IMG_6615.JPG', 
+                        price: 'Rs. 5,490.00', 
+                        quantity: 1,
+                        size: 'S'
+                    }
+                ],
+                shippingAddress: 'Rivindu Wickramasekara<br>No. 25, Colombo<br>Sri Lanka',
+                trackingNumber: 'TRK123456789',
+                trackingSteps: [
+                    { status: 'ordered', label: 'Order Placed', date: '2024-01-15', completed: true },
+                    { status: 'confirmed', label: 'Order Confirmed', date: '2024-01-15', completed: true },
+                    { status: 'shipped', label: 'Shipped', date: '2024-01-16', completed: true },
+                    { status: 'delivered', label: 'Delivered', date: '2024-01-18', completed: true }
+                ]
+            },
+            'ORD-002': {
+                id: 'ORD-002',
+                date: '2024-01-10',
+                status: 'shipped',
+                total: 'Rs. 7,300.00',
+                subtotal: 'Rs. 7,300.00',
+                shipping: 'FREE',
+                estimatedDelivery: '2024-01-18',
+                deliveryTimeframe: '5-7 business days',
+                actualDelivery: null,
+                items: [
+                    { 
+                        name: 'Paisley Skirt', 
+                        image: '../Assets/0123.JPG', 
+                        price: 'Rs. 2,800.00', 
+                        quantity: 1,
+                        size: 'M'
+                    },
+                    { 
+                        name: 'Summer Vacay Dress', 
+                        image: '../Assets/0149.JPG', 
+                        price: 'Rs. 4,500.00', 
+                        quantity: 1,
+                        size: 'L'
+                    }
+                ],
+                shippingAddress: 'Rivindu Wickramasekara<br>No. 25, Colombo<br>Sri Lanka',
+                trackingNumber: 'TRK987654321',
+                trackingSteps: [
+                    { status: 'ordered', label: 'Order Placed', date: '2024-01-10', completed: true },
+                    { status: 'confirmed', label: 'Order Confirmed', date: '2024-01-10', completed: true },
+                    { status: 'shipped', label: 'Shipped', date: '2024-01-12', completed: true },
+                    { status: 'delivered', label: 'Delivered', date: null, completed: false }
+                ]
+            }
+        };
+
+        // Notification settings
+        const notificationSettings = {
+            email: true,
+            sms: false,
+            statusUpdates: true,
+            promotional: false
+        };
+
+        function updateCartCount() {
+            const cartItems = JSON.parse(localStorage.getItem('paradyzeCart')) || [];
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Pending';
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'processing': return 'status-processing';
+                case 'shipped': return 'status-shipped';
+                case 'delivered': return 'status-delivered';
+                case 'cancelled': return 'status-cancelled';
+                default: return 'status-processing';
+            }
+        }
+
+        function renderOrderDetails(order) {
+            // Update main order info
+            document.getElementById('orderId').textContent = `Order ${order.id}`;
+            document.getElementById('orderMeta').textContent = `Placed on ${formatDate(order.date)}`;
+            document.getElementById('orderStatus').textContent = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+            document.getElementById('orderStatus').className = `order-status ${getStatusClass(order.status)}`;
+            document.getElementById('orderSubtitle').textContent = `Viewing details for order ${order.id}`;
+
+            // Render delivery estimate
+            renderDeliveryEstimate(order);
+
+            // Render tracking
+            renderTracking(order);
+
+            // Render items
+            renderOrderItems(order);
+
+            // Render summary
+            renderOrderSummary(order);
+
+            // Render shipping address
+            document.getElementById('shippingAddress').innerHTML = order.shippingAddress;
+
+            // Load notification settings
+            loadNotificationSettings();
+
+            // Load contact information
+            loadContactInfo();
+        }
+
+        function renderDeliveryEstimate(order) {
+            const deliveryEstimate = document.getElementById('deliveryEstimate');
+            
+            let deliveryHTML = '';
+            
+            if (order.status === 'delivered' && order.actualDelivery) {
+                deliveryHTML = `
+                    <h4>📦 Delivered</h4>
+                    <p><strong>Delivered on:</strong> ${formatDate(order.actualDelivery)}</p>
+                    <p>Your order has been successfully delivered.</p>
+                `;
+            } else if (order.estimatedDelivery) {
+                const today = new Date();
+                const deliveryDate = new Date(order.estimatedDelivery);
+                const daysUntilDelivery = Math.ceil((deliveryDate - today) / (1000 * 60 * 60 * 24));
+                
+                let statusText = '';
+                if (daysUntilDelivery === 0) {
+                    statusText = 'Arriving today';
+                } else if (daysUntilDelivery === 1) {
+                    statusText = 'Arriving tomorrow';
+                } else if (daysUntilDelivery > 1) {
+                    statusText = `Arriving in ${daysUntilDelivery} days`;
+                } else {
+                    statusText = 'Arriving soon';
+                }
+                
+                deliveryHTML = `
+                    <h4>📦 Estimated Delivery 
+                        <span class="delivery-timeframe">${statusText}</span>
+                    </h4>
+                    <p><strong>Expected by:</strong> ${formatDate(order.estimatedDelivery)}</p>
+                    ${order.deliveryTimeframe ? `<p><strong>Timeframe:</strong> ${order.deliveryTimeframe}</p>` : ''}
+                    ${order.trackingNumber ? `<p><strong>Tracking:</strong> ${order.trackingNumber}</p>` : ''}
+                `;
+            } else {
+                deliveryHTML = `
+                    <h4>📦 Delivery Information</h4>
+                    <p>Delivery estimate will be available once your order is processed.</p>
+                `;
+            }
+            
+            deliveryEstimate.innerHTML = deliveryHTML;
+        }
+
+        function renderTracking(order) {
+            const trackingSteps = document.getElementById('trackingSteps');
+            const trackingInfo = document.getElementById('trackingInfo');
+
+            if (!order.trackingNumber) {
+                document.getElementById('trackingSection').style.display = 'none';
+                return;
+            }
+
+            let stepsHTML = '';
+            order.trackingSteps.forEach((step, index) => {
+                const stepClass = step.completed ? 'step-completed' : 
+                                index === order.trackingSteps.findIndex(s => !s.completed) ? 'step-active' : '';
+                
+                stepsHTML += `
+                    <div class="tracking-step ${stepClass}">
+                        <div class="step-icon">
+                            ${step.completed ? '✓' : (index + 1)}
+                        </div>
+                        <div class="step-label">${step.label}</div>
+                        <div class="step-date">${formatDate(step.date)}</div>
+                    </div>
+                `;
+            });
+
+            trackingSteps.innerHTML = stepsHTML;
+            
+            const lastCompletedStep = order.trackingSteps.filter(step => step.completed).pop();
+            trackingInfo.innerHTML = `
+                <strong>Tracking Number:</strong> <span class="tracking-number">${order.trackingNumber}</span><br>
+                <strong>Last Update:</strong> ${lastCompletedStep ? formatDate(lastCompletedStep.date) : 'No updates yet'}
+            `;
+        }
+
+        function renderOrderItems(order) {
+            const itemsTable = document.getElementById('itemsTable');
+            
+            let itemsHTML = `
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            order.items.forEach(item => {
+                // Calculate item total correctly
+                const priceNumber = parseFloat(item.price.replace('Rs. ', '').replace(',', ''));
+                const itemTotal = `Rs. ${(priceNumber * item.quantity).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                
+                itemsHTML += `
+                    <tr>
+                        <td>
+                            <div class="item-info">
+                                <div class="item-image">
+                                    <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0yMCAyMEg0MFY0MEgyMFYyMFoiIGZpbGw9IiNEOEQ4RDgiLz4KPHBhdGggZD0iTTI2IDI2VjM0SDM0VjI2SDI2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+';">
+                                </div>
+                                <div class="item-details">
+                                    <h4>${item.name}</h4>
+                                    <p>Size: ${item.size}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="item-price">${item.price}</td>
+                        <td class="item-quantity">${item.quantity}</td>
+                        <td class="item-price">${itemTotal}</td>
+                    </tr>
+                `;
+            });
+
+            itemsHTML += '</tbody>';
+            itemsTable.innerHTML = itemsHTML;
+        }
+
+        function renderOrderSummary(order) {
+            const summaryDetails = document.getElementById('summaryDetails');
+            
+            summaryDetails.innerHTML = `
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">${order.subtotal}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Shipping</span>
+                    <span class="summary-value">${order.shipping}</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>${order.total}</span>
+                </div>
+            `;
+        }
+
+        function loadNotificationSettings() {
+            const savedSettings = JSON.parse(localStorage.getItem('paradyzeNotificationSettings'));
+            if (savedSettings) {
+                Object.assign(notificationSettings, savedSettings);
+            }
+            
+            document.getElementById('emailNotifications').checked = notificationSettings.email;
+            document.getElementById('smsNotifications').checked = notificationSettings.sms;
+            document.getElementById('statusUpdates').checked = notificationSettings.statusUpdates;
+            document.getElementById('promotionalUpdates').checked = notificationSettings.promotional;
+        }
+
+        function saveNotificationSettings() {
+            notificationSettings.email = document.getElementById('emailNotifications').checked;
+            notificationSettings.sms = document.getElementById('smsNotifications').checked;
+            notificationSettings.statusUpdates = document.getElementById('statusUpdates').checked;
+            notificationSettings.promotional = document.getElementById('promotionalUpdates').checked;
+            
+            localStorage.setItem('paradyzeNotificationSettings', JSON.stringify(notificationSettings));
+            showSuccessMessage('Settings Saved', 'Your notification preferences have been updated.');
+        }
+
+        function loadContactInfo() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {
+                email: 'customer@example.com',
+                phone: '+94 77 123 4567'
+            };
+            
+            document.getElementById('contactEmail').textContent = currentUser.email;
+            
+            // Only show phone if it exists and is not empty
+            if (currentUser.phone && currentUser.phone.trim() !== '') {
+                document.getElementById('contactPhone').textContent = currentUser.phone;
+            } else {
+                document.getElementById('contactPhone').style.display = 'none';
+            }
+        }
+
+        function updateContactInfo() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+            const newEmail = prompt('Enter your email address:', currentUser.email || '');
+            
+            if (newEmail !== null) {
+                const newPhone = prompt('Enter your phone number:', currentUser.phone || '');
+                
+                if (newPhone !== null) {
+                    // Update display
+                    document.getElementById('contactEmail').textContent = newEmail;
+                    
+                    if (newPhone.trim() !== '') {
+                        document.getElementById('contactPhone').textContent = newPhone;
+                        document.getElementById('contactPhone').style.display = 'block';
+                    } else {
+                        document.getElementById('contactPhone').style.display = 'none';
+                    }
+                    
+                    // Update in localStorage
+                    currentUser.email = newEmail;
+                    currentUser.phone = newPhone;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    showSuccessMessage('Contact Updated', 'Your contact information has been updated.');
+                }
+            }
+        }
+
+        function testNotification() {
+            // In a real application, this would call your backend API
+            // For demo purposes, we'll simulate the API call
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const order = sampleOrders[orderId];
+            
+            if (!order) {
+                alert('Order not found.');
+                return;
+            }
+            
+            // Simulate API call to send notification
+            simulateSendNotification(order, 'test');
+            
+            showSuccessMessage('Test Sent', 'A test notification has been sent to your enabled channels.');
+        }
+
+        function requestStatusUpdate() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const order = sampleOrders[orderId];
+            
+            if (!order) {
+                alert('Order not found.');
+                return;
+            }
+            
+            // In a real application, this would call your backend API
+            // For demo purposes, we'll simulate the API call
+            
+            simulateSendNotification(order, 'status_request');
+            
+            showSuccessMessage('Update Requested', 'Your status update request has been sent. We will notify you when there are changes.');
+        }
+
+        function simulateSendNotification(order, type) {
+            // This is a simulation of what would happen on the backend
+            console.log(`Sending ${type} notification for order ${order.id}`);
+            
+            // Check user preferences
+            if (notificationSettings.email) {
+                console.log(`Sending email to ${document.getElementById('contactEmail').textContent}`);
+                // In reality, this would call your email service (SendGrid, Mailgun, etc.)
+            }
+            
+            if (notificationSettings.sms) {
+                const phoneElement = document.getElementById('contactPhone');
+                if (phoneElement.style.display !== 'none') {
+                    console.log(`Sending SMS to ${phoneElement.textContent}`);
+                    // In reality, this would call your SMS service (Twilio, etc.)
+                }
+            }
+            
+            // Sample notification content based on type
+            let subject, message;
+            
+            switch(type) {
+                case 'test':
+                    subject = 'Test Notification from Paradyze';
+                    message = 'This is a test notification to confirm your notification settings are working correctly.';
+                    break;
+                case 'status_request':
+                    subject = `Status Update Request for Order ${order.id}`;
+                    message = `We have received your request for a status update on order ${order.id}. We will notify you as soon as there are any changes.`;
+                    break;
+                case 'status_update':
+                    subject = `Order ${order.id} Status Update`;
+                    message = `Your order status has been updated to: ${order.status}`;
+                    break;
+                case 'shipped':
+                    subject = `Your Paradyze Order ${order.id} Has Been Shipped!`;
+                    message = `Your order has been shipped. Tracking number: ${order.trackingNumber}`;
+                    break;
+                case 'delivered':
+                    subject = `Your Paradyze Order ${order.id} Has Been Delivered!`;
+                    message = 'Your order has been successfully delivered. Thank you for shopping with Paradyze!';
+                    break;
+            }
+            
+            console.log(`Notification subject: ${subject}`);
+            console.log(`Notification message: ${message}`);
+            
+            // In a real application, you would:
+            // 1. Call your backend API endpoint
+            // 2. Backend would process the request and send emails/SMS
+            // 3. Backend might use services like:
+            //    - SendGrid, Mailgun for emails
+            //    - Twilio for SMS
+            //    - Firebase Cloud Messaging for push notifications
+        }
+
+        function showSuccessMessage(title, text) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successText').textContent = text;
+            document.getElementById('successMessage').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function closeSuccessMessage() {
+            document.getElementById('successMessage').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        function downloadInvoice() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const order = sampleOrders[orderId];
+            
+            if (!order) {
+                alert('Order not found.');
+                return;
+            }
+
+            // Populate the invoice template
+            document.getElementById('invoiceOrderId').textContent = order.id;
+            document.getElementById('invoiceDate').textContent = formatDate(order.date);
+            document.getElementById('invoiceStatus').textContent = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+            document.getElementById('invoiceDelivery').textContent = order.estimatedDelivery ? formatDate(order.estimatedDelivery) : 'To be confirmed';
+            document.getElementById('invoiceSubtotal').textContent = order.subtotal;
+            document.getElementById('invoiceShipping').textContent = order.shipping;
+            document.getElementById('invoiceTotal').textContent = order.total;
+            document.getElementById('invoiceAddress').innerHTML = order.shippingAddress.replace(/<br>/g, '<br>');
+
+            // Populate invoice items
+            const invoiceItems = document.getElementById('invoiceItems');
+            let itemsHTML = '';
+            
+            order.items.forEach(item => {
+                const priceNumber = parseFloat(item.price.replace('Rs. ', '').replace(',', ''));
+                const itemTotal = `Rs. ${(priceNumber * item.quantity).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                
+                itemsHTML += `
+                    <tr>
+                        <td>${item.name} (Size: ${item.size})</td>
+                        <td>${item.price}</td>
+                        <td>${item.quantity}</td>
+                        <td>${itemTotal}</td>
+                    </tr>
+                `;
+            });
+            
+            invoiceItems.innerHTML = itemsHTML;
+
+            // Generate PDF from HTML template
+            const invoiceElement = document.getElementById('invoiceTemplate');
+            
+            html2canvas(invoiceElement, {
+                scale: 2, // Higher quality
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 295; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save(`invoice-${order.id}.pdf`);
+                showSuccessMessage('Invoice Downloaded!', 'Your invoice has been successfully downloaded as a PDF file.');
+            });
+        }
+
+        function downloadDeliverySlip() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const order = sampleOrders[orderId];
+            
+            if (!order) {
+                alert('Order not found.');
+                return;
+            }
+
+            // Populate the delivery slip template
+            document.getElementById('slipOrderId').textContent = order.id;
+            document.getElementById('slipDate').textContent = formatDate(order.date);
+            document.getElementById('slipStatus').textContent = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+            document.getElementById('slipTracking').textContent = order.trackingNumber || 'Not assigned';
+            document.getElementById('slipAddress').innerHTML = order.shippingAddress.replace(/<br>/g, '<br>');
+
+            // Populate delivery slip items (simpler format - no prices)
+            const slipItems = document.getElementById('slipItems');
+            let itemsHTML = '';
+            
+            order.items.forEach(item => {
+                itemsHTML += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.size}</td>
+                        <td>${item.quantity}</td>
+                    </tr>
+                `;
+            });
+            
+            slipItems.innerHTML = itemsHTML;
+
+            // Generate PDF from HTML template
+            const slipElement = document.getElementById('deliverySlipTemplate');
+            
+            html2canvas(slipElement, {
+                scale: 2, // Higher quality
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 295; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save(`delivery-slip-${order.id}.pdf`);
+                showSuccessMessage('Delivery Slip Downloaded!', 'Your delivery slip has been successfully downloaded as a PDF file.');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            
+            // Check if user is logged in
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                // For demo purposes, we'll skip the login redirect
+                // window.location.href = 'login.html';
+                // return;
+            }
+
+            // Get order ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+
+            if (!orderId) {
+                // If no order ID in URL, default to ORD-001 for demo
+                const defaultOrderId = 'ORD-001';
+                window.history.replaceState(null, null, `?id=${defaultOrderId}`);
+                const order = sampleOrders[defaultOrderId];
+                renderOrderDetails(order);
+                return;
+            }
+
+            // Load order data (in real app, this would be from your backend)
+            const userOrders = JSON.parse(localStorage.getItem('paradyzeOrders')) || [];
+            const order = userOrders.find(o => o.id === orderId) || sampleOrders[orderId];
+
+            if (!order) {
+                alert('Order not found.');
+                window.location.href = 'order-history.html';
+                return;
+            }
+
+            renderOrderDetails(order);
+        });
+    </script>
+    <script src="/Assets/js/auth.js"></script>
+</body>
+</html>
