@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Paradyze</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .auth-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #183F35 0%, #2c5549 100%);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+
+        .logo-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 10%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10%;
+        }
+
+        .welcome-text {
+            margin-top: 2rem;
+        }
+
+        .welcome-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .welcome-text p {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #183F35;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 2rem;
+        }
+
+        .forgot-password a {
+            color: #183F35;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #183F35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            background: #0f2c24;
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .switch-form p {
+            color: #666;
+        }
+
+        .switch-form a {
+            color: #183F35;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        .register-form {
+            display: none;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .toggle-password:hover {
+            color: #333;
+        }
+
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            top: 50%;
+            left: 50%;
+            margin-left: -9px;
+            margin-top: -9px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #183F35, #2c5549);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            animation: slideIn 0.3s ease-out;
+            max-width: 300px;
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-icon {
+            font-size: 1.2em;
+        }
+
+        .toast-text {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .toast-notification.error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .toast-notification.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-left: 4px solid #ffd93d;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .user-type-btn.active {
+            background: #183F35;
+            color: white;
+            border-color: #183F35;
+        }
+
+        .staff-fields {
+            display: none;
+        }
+
+        .staff-only-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border: 1px solid #ffeaa7;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Hide register section for staff */
+        .staff-mode .divider,
+        .staff-mode .switch-form {
+            display: none !important;
+        }
+
+        /* Footer Styles - Matching Index Page */
+        footer {
+            background: #183F35;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            align-content: center;
+        }
+
+        .footer-bottom {
+            background-color: #183F35;
+            text-align: center;
+            align-items: center;
+            height: 60px;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+
+        .footer-bottom p {
+            margin: 10;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        /* Horizontal rule styling to match index page */
+        .contact-hr {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #bdc3c7, transparent);
+            margin: 0 auto 20px; 
+            width: 100%;
+            border: none;
+        }
+
+        @media (max-width: 968px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section {
+                padding: 40px 30px;
+            }
+            
+            .welcome-text h2 {
+                font-size: 1.8rem;
+            }
+
+            .toast-notification {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 40px 30px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .logo-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="auth-container">
+            <div class="welcome-section">
+                <div class="logo-container">
+                    <div class="logo-image">
+                        <img src="/assets/logo.jpg" alt="Paradyze Logo">
+                    </div>
+                </div>
+                <div class="welcome-text">
+                    <h2>Welcome Back to Paradyze!</h2>
+                    <p>Discover your style and shop the trendiest outfits.</p>
+                </div>
+            </div>
+
+            <div class="form-section" id="formSection">
+                <!-- Login Form -->
+                <div class="login-form" id="loginForm">
+                    <h2 class="form-title">Login to Your Account</h2>
+                    
+                    <div class="user-type-selector">
+                        <div class="user-type-btn active" data-type="customer">Customer</div>
+                        <div class="user-type-btn" data-type="staff">Staff</div>
+                    </div>
+                    
+                    <div class="staff-only-message" id="staffOnlyMessage">
+                        <i class="fas fa-info-circle"></i> Staff accounts are managed by administrators only. Registration is not available for staff users.
+                    </div>
+                    
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" placeholder="example@gmail.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <div class="password-input-container">
+                                <input type="password" id="loginPassword" placeholder="*********" required>
+                                <button type="button" class="toggle-password">👁️</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Staff Role Selection (Hidden by default) -->
+                        <div class="form-group staff-fields" id="staffRoleGroup">
+                            <label for="staffRole">Role</label>
+                            <select id="staffRole">
+                                <option value="">Select Role</option>
+                                <option value="admin">Administrator</option>
+                                <option value="operation_manager">Operation Manager</option>
+                                <option value="marketing_manager">Marketing Manager</option>
+                                <option value="store_manager">Store Manager</option>
+                                <option value="warehouse_staff">Warehouse Staff</option>
+                            </select>
+                        </div>
+                        
+                        <div class="forgot-password">
+                            <a href="\Customer\forgot-password.html">Forgot your password?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    
+                    <!-- This section will be hidden when staff is selected -->
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+                    
+                    <div class="switch-form">
+                        <p>Don't have an account? <a href="#" id="registerLink">Register</a></p>
+                    </div>
+                </div>
+
+                <!-- Register Form (Customer Only - Hidden when staff is selected) -->
+                <div class="register-form" id="registerForm">
+                    <h2 class="form-title">Create Your Account</h2>
+                    
+                    <form id="registerFormElement">
+                        <div class="form-group">
+                            <label for="registerName">Full Name</label>
+                            <input type="text" id="registerName" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" placeholder="example@gmail.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <div class="password-input-container">
+                                <input type="password" id="registerPassword" placeholder="*********" required>
+                                <button type="button" class="toggle-password">👁️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <div class="password-input-container">
+                                <input type="password" id="confirmPassword" placeholder="*********" required>
+                                <button type="button" class="toggle-password">👁️</button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn">Create Account</button>
+                    </form>
+                    
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+                    
+                    <div class="switch-form">
+                        <p>Already have an account? <a href="#" id="loginLink">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer - Matched to Index Page -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Paradyze</h3>
+                <p>Paradyze (Pvt) Limited is a startup in Sri Lanka striving to redefine the clothing retail experience by operating as a direct-to-consumer brand focused on delivering affordable and quality fashion items. Paradyze primarily targets young adults and teenagers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/paradyze.lk?igsh=MW9iZTViNGdkczdqNw==" target="_blank" class="social-icon">
+                        <img src="/Assets/instagram.png" alt="Instagram">
+                    </a>
+                    <a href="https://www.facebook.com/share/17J3emuXc5/?mibextid=wwXIfr" target="_blank" class="social-icon">
+                        <img src="/Assets/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="mailto:paradyzelk@gmail.com" class="social-icon">
+                        <img src="/Assets/email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-item">
+                    📍 No.26, Mallika Mawatha, Old Templers Road, Mount Lavinia, Sri Lanka
+                </div>
+                <hr>
+                <div class="contact-item">
+                    📞 011 288 6837
+                </div>
+                <hr>
+                <div class="contact-item">
+                    ✉️ paradyzelk@gmail.com
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Paradyze. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Define role permissions based on your requirements
+        const rolePermissions = {
+            admin: ['dashboard', 'customers', 'inventory', 'orders', 'products', 'reports', 'returns', 'staff'],
+            operation_manager: ['dashboard', 'customers', 'inventory', 'orders', 'products', 'reports', 'returns', 'staff'],
+            marketing_manager: ['dashboard', 'inventory', 'products'],
+            store_manager: ['dashboard', 'inventory', 'products', 'orders', 'returns'],
+            warehouse_staff: ['dashboard', 'orders', 'returns'],
+            customer: ['dashboard']
+        };
+
+        const staffCredentials = {
+            "admin@paradyze.com": {
+                password: "admin123",
+                role: "admin",
+                name: "Administrator",
+                permissions: rolePermissions.admin
+            },
+            "operation_manager@paradyze.com": {
+                password: "opmanager123",
+                role: "operation_manager",
+                name: "Operation Manager",
+                permissions: rolePermissions.operation_manager
+            },
+            "marketing_manager@paradyze.com": {
+                password: "marketing123",
+                role: "marketing_manager",
+                name: "Marketing Manager",
+                permissions: rolePermissions.marketing_manager
+            },
+            "store_manager@paradyze.com": {
+                password: "storemanager123",
+                role: "store_manager",
+                name: "Store Manager",
+                permissions: rolePermissions.store_manager
+            },
+            "warehouse_staff@paradyze.com": {
+                password: "warehouse123",
+                role: "warehouse_staff",
+                name: "Warehouse Staff",
+                permissions: rolePermissions.warehouse_staff
+            }
+        };
+
+        function showNotification(title, message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `toast-notification ${type === 'error' ? 'error' : type === 'warning' ? 'warning' : ''}`;
+            
+            let icon = 'fas fa-check-circle';
+            if (type === 'error') icon = 'fas fa-exclamation-circle';
+            if (type === 'warning') icon = 'fas fa-exclamation-triangle';
+            if (type === 'info') icon = 'fas fa-info-circle';
+            
+            notification.innerHTML = `
+                <div class="toast-content">
+                    <i class="${icon} toast-icon"></i>
+                    <div class="toast-text">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        function showRegister() {
+            const userType = document.querySelector('.user-type-btn.active').getAttribute('data-type');
+            
+            if (userType === 'staff') {
+                showNotification('Staff Registration Not Available', 'Staff accounts are managed by administrators only. Please contact your administrator for account setup.', 'warning');
+                return;
+            }
+            
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function toggleStaffMode(isStaff) {
+            const formSection = document.getElementById('formSection');
+            if (isStaff) {
+                formSection.classList.add('staff-mode');
+                showLogin();
+            } else {
+                formSection.classList.remove('staff-mode');
+            }
+        }
+
+        function initializeUserTypeSelection() {
+            const userTypeBtns = document.querySelectorAll('.user-type-btn');
+            const staffRoleGroup = document.getElementById('staffRoleGroup');
+            const staffOnlyMessage = document.getElementById('staffOnlyMessage');
+            
+            userTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    userTypeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const userType = this.getAttribute('data-type');
+                    if (userType === 'staff') {
+                        staffRoleGroup.style.display = 'block';
+                        staffOnlyMessage.style.display = 'block';
+                        staffRoleGroup.querySelector('select').required = true;
+                        toggleStaffMode(true);
+                    } else {
+                        staffRoleGroup.style.display = 'none';
+                        staffOnlyMessage.style.display = 'none';
+                        staffRoleGroup.querySelector('select').required = false;
+                        toggleStaffMode(false);
+                        showLogin();
+                    }
+                });
+            });
+        }
+
+        function initializePasswordToggles() {
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+                });
+            });
+        }
+
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const userType = document.querySelector('.user-type-btn.active').getAttribute('data-type');
+            const staffRole = document.getElementById('staffRole').value;
+            const btn = this.querySelector('.btn');
+            
+            if (email && password) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    if (userType === 'customer') {
+                        const users = JSON.parse(localStorage.getItem('paradyzeUsers') || '[]');
+                        const user = users.find(u => u.email === email && u.password === btoa(password));
+                        
+                        if (user) {
+                            localStorage.setItem('currentUser', JSON.stringify({
+                                email: user.email,
+                                name: user.name,
+                                loginTime: Date.now(),
+                                userType: 'customer',
+                                role: 'customer',
+                                permissions: rolePermissions.customer
+                            }));
+                            
+                            showNotification('Login Successful!', 'Welcome back to Paradyze! Redirecting to your account...', 'success');
+                            
+                            setTimeout(() => {
+                                window.location.href = '/Customer/account.html';
+                            }, 2000);
+                            
+                        } else {
+                            showNotification('Login Failed', 'Invalid email or password. Please try again.', 'error');
+                            btn.classList.remove('loading');
+                            btn.disabled = false;
+                        }
+                    } else {
+                        if (!staffRole) {
+                            showNotification('Role Required', 'Please select your staff role.', 'error');
+                            btn.classList.remove('loading');
+                            btn.disabled = false;
+                            return;
+                        }
+                        
+                        if (staffCredentials[email] && 
+                            staffCredentials[email].password === password && 
+                            staffCredentials[email].role === staffRole) {
+                            
+                            localStorage.setItem('currentUser', JSON.stringify({
+                                email: email,
+                                role: staffRole,
+                                name: staffCredentials[email].name,
+                                permissions: staffCredentials[email].permissions,
+                                loginTime: new Date().toISOString(),
+                                userType: 'staff'
+                            }));
+                            
+                            showNotification('Staff Login Successful!', `Welcome ${staffCredentials[email].name}! Redirecting to dashboard...`, 'success');
+                            
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 2000);
+                            
+                        } else {
+                            showNotification('Login Failed', 'Invalid email, password, or role mismatch!', 'error');
+                            btn.classList.remove('loading');
+                            btn.disabled = false;
+                        }
+                    }
+                }, 1000);
+            }
+        });
+
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const btn = this.querySelector('.btn');
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords Do Not Match', 'Please make sure both passwords are identical.', 'error');
+                return;
+            }
+            
+            if (name && email && password) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    const users = JSON.parse(localStorage.getItem('paradyzeUsers') || '[]');
+                    
+                    if (users.find(u => u.email === email)) {
+                        showNotification('Email Already Exists', 'An account with this email already exists.', 'error');
+                        btn.classList.remove('loading');
+                        btn.disabled = false;
+                        return;
+                    }
+                    
+                    users.push({
+                        name: name,
+                        email: email,
+                        password: btoa(password)
+                    });
+                    localStorage.setItem('paradyzeUsers', JSON.stringify(users));
+                    
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        email: email,
+                        name: name,
+                        loginTime: Date.now(),
+                        userType: 'customer',
+                        role: 'customer',
+                        permissions: rolePermissions.customer
+                    }));
+                    
+                    showNotification('Account Created!', 'Your account has been created successfully. Redirecting to your account...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/Customer/account.html';
+                    }, 2000);
+                    
+                }, 1000);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showLogin();
+            initializePasswordToggles();
+            initializeUserTypeSelection();
+            
+            document.getElementById('registerLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                showRegister();
+            });
+            
+            document.getElementById('loginLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                showLogin();
+            });
+        });
+    </script>
+</body>
+</html>
